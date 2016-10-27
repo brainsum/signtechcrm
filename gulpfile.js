@@ -1,4 +1,5 @@
-var elixir = require('laravel-elixir');
+const elixir = require('laravel-elixir');
+const webpack = require('webpack');
 
 /*
  |--------------------------------------------------------------------------
@@ -12,5 +13,15 @@ var elixir = require('laravel-elixir');
  */
 
 elixir(function(mix) {
-    mix.sass('app.scss');
+	mix
+        .sass('app.scss')
+        .webpack('app.js')
+        .version([
+            'css/app.css',
+            'js/app.js'
+        ]);
+
+    elixir.isWatching() && mix.browserSync({
+        proxy: 'http://signtechsqr.local'
+    });
 });
