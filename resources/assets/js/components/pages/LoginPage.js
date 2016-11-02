@@ -1,7 +1,24 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { Redirect } from 'react-router';
 
-export default class LoginPage extends Component {
+class LoginPage extends Component {
+    constructor(props) {
+        super(props);
+
+        this.handleLogin = this.handleLogin.bind(this);
+    }
+
+    handleLogin() {
+        this.props.dispatch({ type: 'LOGIN' });
+    }
+
     render() {
+        console.log(this.props.loggedIn);
+        if (this.props.loggedIn) {
+            return <Redirect to='/my-forms' />;
+        }
+
         return (
             <div className="container">
                 <h1 className="page-title">Log in</h1>
@@ -22,10 +39,18 @@ export default class LoginPage extends Component {
                             </div>
                         </div>
 
-                        <button className="btn btn-primary btn-block">Log In</button>
+                        <button className="btn btn-primary btn-block" onClick={this.handleLogin}>Log In</button>
                     </div>
                 </div>
             </div>
         );
     }
 }
+
+function mapStateToProps(state) {
+    return {
+        loggedIn: state ? state.loggedIn : false
+    }
+}
+
+export default connect(mapStateToProps)(LoginPage);

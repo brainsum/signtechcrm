@@ -19,7 +19,8 @@
         border-radius: 5px;
         transition: background .2s;
 
-        &:hover {
+        &:hover,
+        &:focus {
             background: #f4f4f4;
             color: $green;
         }

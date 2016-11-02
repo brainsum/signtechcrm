@@ -2915,7 +2915,7 @@ tbody.collapse.in {
     border-radius: 5px;
     -webkit-transition: background .2s;
     transition: background .2s; }
-    .nav__link:hover {
+    .nav__link:hover, .nav__link:focus {
       background: #f4f4f4;
       color: #00b655; }
     .nav__link--active, .nav__link--active:hover {
@@ -5123,7 +5123,7 @@ a.text-gray-dark:focus, a.text-gray-dark:hover {
     border-radius: 5px;
     -webkit-transition: background .2s;
     transition: background .2s; }
-    .nav__link:hover {
+    .nav__link:hover, .nav__link:focus {
       background: #f4f4f4;
       color: #00b655; }
     .nav__link--active, .nav__link--active:hover {
