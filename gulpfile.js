@@ -14,7 +14,12 @@ const webpack = require('webpack');
 
 elixir(function(mix) {
 	mix
-        .sass('app.scss')
+        .sass('app.scss', null, null, {
+            includePaths: [
+                './node_modules/normalize.css',
+                './node_modules/bootstrap/scss'
+            ]
+        })
         .webpack('app.js')
         .version([
             'css/app.css',

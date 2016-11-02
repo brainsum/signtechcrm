@@ -1,0 +1,15 @@
+.header {
+    &__inner {
+        display: flex;
+        justify-content: space-between;
+        padding-top: 1rem;
+        padding-bottom: 1rem;
+    }
+
+    // @todo temporary, remove when logo images are included
+    &__logo {
+        font-size: 1.25rem;
+        font-weight: 700;
+        line-height: 3rem;
+    }
+}

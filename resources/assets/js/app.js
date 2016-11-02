@@ -1,9 +1,10 @@
 import React from 'react';
 import { render } from 'react-dom';
+import Layout from 'app/components/Layout';
 
 const root = document.getElementById('root');
 
 render(
-    <p>Hello World</p>,
+    <Layout />,
     root
 );

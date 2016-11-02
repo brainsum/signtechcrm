@@ -11,6 +11,6 @@
 |
 */
 
-Route::get('/', function () {
+Route::any('{all?}', function($any) {
     return view('index');
-});
+})->where('all', '.+');
