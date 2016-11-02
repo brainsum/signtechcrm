@@ -1,0 +1,23 @@
+.footer {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: #34373e;
+    color: #fff;
+    text-align: center;
+    line-height: 5rem;
+
+    img {
+        vertical-align: middle;
+        margin-right: 2rem;
+    }
+
+    a {
+        color: $green;
+
+        &:hover {
+            color: lighten($green, 10%);
+        }
+    }
+}

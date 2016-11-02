@@ -5130,6 +5130,31 @@ a.text-gray-dark:focus, a.text-gray-dark:hover {
       background: #00b655;
       color: #fff; }
 
+.footer {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background: #34373e;
+  color: #fff;
+  text-align: center;
+  line-height: 5rem; }
+  .footer img {
+    vertical-align: middle;
+    margin-right: 2rem; }
+  .footer a {
+    color: #00b655; }
+    .footer a:hover {
+      color: #00e96d; }
+
+html {
+  height: 100%; }
+
+body {
+  position: relative;
+  min-height: 100%;
+  padding-bottom: 7rem; }
+
 .page-title {
   margin-bottom: 2rem;
   padding: 1rem 0;
