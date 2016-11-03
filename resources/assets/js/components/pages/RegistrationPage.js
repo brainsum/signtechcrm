@@ -23,13 +23,6 @@ export default class RegistrationPage extends Component {
                         </div>
 
                         <div className="form-group">
-                            <label htmlFor="username">Username</label>
-                            <div className="input-group">
-                                <input className="form-control" id="username" name="username" type="text" />
-                            </div>
-                        </div>
-
-                        <div className="form-group">
                             <label htmlFor="email">E-mail</label>
                             <div className="input-group">
                                 <input className="form-control" id="email" name="email" type="email" />
@@ -40,6 +33,13 @@ export default class RegistrationPage extends Component {
                             <label htmlFor="password">Password</label>
                             <div className="input-group">
                                 <input className="form-control" id="password" name="password" type="password" />
+                            </div>
+                        </div>
+
+                        <div className="form-group">
+                            <label htmlFor="password-repeat">Confirm password</label>
+                            <div className="input-group">
+                                <input className="form-control" id="password-repeat" name="password-repeat" type="password" />
                             </div>
                         </div>
 

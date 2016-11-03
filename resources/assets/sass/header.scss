@@ -2,14 +2,22 @@
     &__inner {
         display: flex;
         justify-content: space-between;
+        align-items: center;
         padding-top: 1rem;
         padding-bottom: 1rem;
     }
 
-    // @todo temporary, remove when logo images are included
-    &__logo {
-        font-size: 1.25rem;
-        font-weight: 700;
-        line-height: 3rem;
+    &__logos {
+        &,
+        img {
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        img {
+            &:not(:last-child) {
+                margin-right: 1rem;
+            }
+        }
     }
 }

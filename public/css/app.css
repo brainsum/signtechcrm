@@ -5099,13 +5099,18 @@ a.text-gray-dark:focus, a.text-gray-dark:hover {
   display: flex;
   -webkit-box-pack: justify;
   justify-content: space-between;
+  -webkit-box-align: center;
+  align-items: center;
   padding-top: 1rem;
   padding-bottom: 1rem; }
 
-.header__logo {
-  font-size: 1.25rem;
-  font-weight: 700;
-  line-height: 3rem; }
+.header__logos,
+.header__logos img {
+  display: inline-block;
+  vertical-align: middle; }
+
+.header__logos img:not(:last-child) {
+  margin-right: 1rem; }
 
 .nav {
   list-style: none;
