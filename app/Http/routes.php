@@ -11,6 +11,8 @@
 |
 */
 
+Route::any('/api', 'ApiController@forward');
+
 Route::any('{all?}', function($any) {
     return view('index');
 })->where('all', '.+');
