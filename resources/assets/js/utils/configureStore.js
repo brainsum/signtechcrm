@@ -1,14 +1,18 @@
-import { createStore } from 'redux';
+import { createStore, applyMiddleware } from 'redux';
+import axiosMiddleware from 'redux-axios-middleware';
+import reducers from 'app/reducers/index';
+import axios from 'axios';
 
 export default function configureStore() {
-    const store = createStore(function(state = {
-        loggedIn: false
-    }, action) {
-        switch (action.type) {
-            case 'LOGIN':
-                return { loggedIn: true };
-        }
+    const axiosClient = axios.create({
+        baseURL: '/api',
+        responseType: 'json'
     });
 
-    return store;
+    return createStore(
+        reducers,
+        applyMiddleware(
+            axiosMiddleware(axiosClient)
+        )
+    );
 }

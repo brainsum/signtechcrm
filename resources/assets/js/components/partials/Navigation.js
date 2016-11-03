@@ -39,7 +39,7 @@ class Navigation extends Component {
 
 function mapStateToProps(state) {
     return {
-        loggedIn: state ? state.loggedIn : false
+        loggedIn: state.auth.loggedIn
     }
 }
 

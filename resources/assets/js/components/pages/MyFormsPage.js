@@ -1,7 +1,13 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { Redirect } from 'react-router';
 
-export default class MyFormsPage extends Component {
+class MyFormsPage extends Component {
     render() {
+        if (!this.props.loggedIn) {
+            return <Redirect to="/login" />;
+        }
+
         const forms = [
             { title: 'A Flat in Time Short Term Company Booking Form' },
             { title: 'AAISP / IPS TAG Change Delete Request (.uk domains) and this is my new headers name just for Mate to test and play with this shi' },
@@ -69,3 +75,11 @@ export default class MyFormsPage extends Component {
         );
     }
 }
+
+function mapStateToProps(state) {
+    return {
+        loggedIn: state.auth.loggedIn
+    }
+}
+
+export default connect(mapStateToProps)(MyFormsPage);
