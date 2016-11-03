@@ -1,4 +1,4 @@
-A simple web app for storing form data posted via signtechforms.com SQR forms.
+A web app for storing form data posted via signtechforms.com SQR forms.
 
 ## Laravel PHP Framework
 
