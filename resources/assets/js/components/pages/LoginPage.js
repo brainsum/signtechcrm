@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router';
-import { login } from 'app/actions/auth';
+import { login, readApiJwt } from 'app/actions/auth';
 
 class LoginPage extends Component {
     constructor(props) {
@@ -16,7 +16,9 @@ class LoginPage extends Component {
         this.props.dispatch(login(
             this.refs.email.value,
             this.refs.password.value
-        ));
+        )).then(() => {
+            this.props.dispatch(readApiJwt());
+        });
     }
 
     render() {
