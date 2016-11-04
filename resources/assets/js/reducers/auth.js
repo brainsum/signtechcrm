@@ -29,24 +29,24 @@ export default function(state = {
                 loading: false
             });
 
-            switch (action.payload.data) {
-                case 0:
-                    return Object.assign(newState, {
-                        loggedIn: false,
-                        error: WRONG_EMAIL_OR_PASSWORD
-                    });
-                case 1:
-                    return Object.assign(newState, {
-                        loggedIn: false,
-                        error: UNKNOWN_ERROR
-                    });
-                default:
-                    console.log(action.payload.data.token);
-                    localStorage.setItem(LOCAL_STORAGE_JWT_KEY, action.payload.data.token);
+            if (action.payload.data.token) {
+                localStorage.setItem(LOCAL_STORAGE_JWT_KEY, action.payload.data.token);
 
-                    return Object.assign(newState, {
-                        error: null
-                    });
+                return Object.assign(newState, {
+                    error: null
+                });
+            }
+            else if (action.payload.data === 0) {
+                return Object.assign(newState, {
+                    loggedIn: false,
+                    error: WRONG_EMAIL_OR_PASSWORD
+                });
+            }
+            else {
+                return Object.assign(newState, {
+                    loggedIn: false,
+                    error: UNKNOWN_ERROR
+                });
             }
 
             return newState;

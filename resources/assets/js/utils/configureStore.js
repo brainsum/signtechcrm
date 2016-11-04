@@ -10,6 +10,17 @@ export default function configureStore() {
         responseType: 'json'
     });
 
+    // Remove trailing slash from URL
+    axiosClient.interceptors.request.use(config => {
+        const length = config.url.length;
+
+        if (config.url[length - 1] === '/') {
+            config.url = config.url.substr(0, length - 1);
+        }
+
+        return config;
+    });
+
     const store = createStore(
         reducers,
         applyMiddleware(
