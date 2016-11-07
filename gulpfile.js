@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const elixir = require('laravel-elixir');
 const webpack = require('webpack');
 
@@ -26,7 +28,13 @@ elixir(function(mix) {
             'js/app.js'
         ]);
 
-    elixir.isWatching() && mix.browserSync({
-        proxy: 'http://signtechsqr.local'
-    });
+    if (elixir.isWatching()) {
+        const browserSyncConfig = {};
+
+        if (process.env.BROWSERSYNC_PROXY) {
+            browserSyncConfig.proxy = process.env.BROWSERSYNC_PROXY;
+        }
+
+        mix.browserSync(browserSyncConfig);
+    }
 });
