@@ -70,13 +70,16 @@ html {
 body {
     position: relative;
     min-height: 100%;
-    padding-bottom: 7rem;
+
+    @include media-breakpoint-up(md) {
+    	padding-bottom: 7rem;
+    }
 }
 
 .page-title {
     margin-bottom: 2rem;
     padding: 1rem 0;
-    color: $green;
+    color: $brand-primary;
     text-transform: uppercase;
     border-bottom: 1px dashed #34373e;
 }

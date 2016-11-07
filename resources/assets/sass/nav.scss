@@ -1,6 +1,11 @@
 .nav {
+    display: none;
     list-style: none;
     padding-left: 0;
+
+    @include media-breakpoint-up(md) {
+        display: inline-block;
+    }
 
     &__item {
         display: inline-block;
@@ -13,7 +18,7 @@
     &__link {
         display: inline-block;
         padding: 1rem;
-        color: $green;
+        color: $brand-primary;
         font-weight: 700;
         text-transform: uppercase;
         border-radius: 5px;
@@ -22,15 +27,120 @@
         &:hover,
         &:focus {
             background: #f4f4f4;
-            color: $green;
+            color: $brand-primary;
         }
 
         &--active {
             &,
             &:hover {
-                background: $green;
+                background: $brand-primary;
                 color: #fff;
             }
+        }
+    }
+}
+
+.nav-mobile {
+    @include media-breakpoint-up(md) {
+        display: none;
+    }
+
+    &__hamburger {
+        $thickness: 3px;
+
+        display: inline-block;
+        position: relative;
+        width: 3em;
+        height: 2em;
+        margin-right: 1rem;
+        vertical-align: middle;
+        cursor: pointer;
+
+        @include media-breakpoint-up(sm) {
+            margin-right: 0;
+        }
+
+        &::before,
+        &::after,
+        span {
+            content: '';
+            display: inline-block;
+            position: absolute;
+            left: 0;
+            width: 100%;
+            height: $thickness;
+            background: $brand-primary;
+            border-radius: $border-radius;
+        }
+
+        &::before {
+            top: 0;
+        }
+
+        &::after {
+            bottom: 0;
+        }
+
+        span {
+            top: calc(50% - #{$thickness / 2});
+        }
+    }
+
+    &__checkbox {
+        position: absolute;
+        opacity: 0;
+
+        &:checked {
+            + .nav-mobile__backdrop {
+                visibility: visible;
+                opacity: 1;
+                transition: opacity .25s, visibility 0s;
+            }
+
+            ~ .nav-mobile__list {
+                visibility: visible;
+                transform: translateX(100%);
+                transition: transform .25s, visibility 0s;
+            }
+        }
+    }
+
+    &__backdrop {
+        visibility: hidden;
+        position: fixed;
+        z-index: 1;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        background: rgba(#000, .75);
+        opacity: 0;
+        transform: opacity .25s, visibility 0s .25s;
+    }
+
+    &__list {
+        visibility: hidden;
+        position: fixed;
+        z-index: 2;
+        top: 0;
+        right: 100%;
+        bottom: 0;
+        margin-bottom: 0;
+        padding: 0;
+        background: #fff;
+        transform: translateX(0%);
+        transition: transform .25s, visibility 0s .25s;
+    }
+
+    &__link {
+        display: block;
+        padding: 1rem;
+        white-space: nowrap;
+        border-bottom: 1px solid $gray-lightest;
+
+        &--active {
+            background: $brand-primary;
+            color: #fff;
         }
     }
 }

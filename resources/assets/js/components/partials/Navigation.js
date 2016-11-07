@@ -24,15 +24,46 @@ class Navigation extends Component {
         let index = 0;
 
         return (
-            <ul className="nav">
-                {items.map(item => (
-                    <li key={index++} className="nav__item">
-                        <Link className="nav__link" to={item.to} activeClassName="nav__link--active">
-                            {item.title}
-                        </Link>
-                    </li>
-                ))}
-            </ul>
+            <div>
+                <ul className="nav">
+                    {items.map(item => (
+                        <li key={index++} className="nav__item">
+                            <Link
+                                className="nav__link"
+                                activeClassName="nav__link--active"
+                                to={item.to}
+                            >
+                                {item.title}
+                            </Link>
+                        </li>
+                    ))}
+                </ul>
+
+                <div className="nav-mobile">
+                    <label className="nav-mobile__hamburger" htmlFor="hamburger">
+                        <span></span>
+                    </label>
+                    <input
+                        className="nav-mobile__checkbox"
+                        id="hamburger"
+                        type="checkbox"
+                    />
+                    <label className="nav-mobile__backdrop" htmlFor="hamburger"></label>
+                    <ul className="nav-mobile__list">
+                        {items.map(item => (
+                            <li>
+                                <Link
+                                    className="nav-mobile__link"
+                                    activeClassName="nav-mobile__link--active"
+                                    to={item.to}
+                                >
+                                    {item.title}
+                                </Link>
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+            </div>
         );
     }
 }

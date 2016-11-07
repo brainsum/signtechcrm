@@ -46,7 +46,7 @@ class MyFormsPage extends Component {
                     </tbody>
                 </table>
 
-                <div className="text-sm-center">
+                <div className="text-xs-center">
                     <ul className="pagination">
                         <li className="page-item disabled">
                             <a href="#" className="page-link">&laquo;</a>
