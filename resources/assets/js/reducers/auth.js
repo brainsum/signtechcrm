@@ -14,7 +14,8 @@ const LOCAL_STORAGE_JWT_KEY = 'api_jwt';
 export default function(state = {
     loggedIn: false,
     loading: false,
-    error: null
+    error: null,
+    user: null
 }, action) {
     switch (action.type) {
         // Login request started
@@ -58,10 +59,26 @@ export default function(state = {
             });
         case AUTH_READ_API_JWT:
             const token = localStorage.getItem(LOCAL_STORAGE_JWT_KEY);
+            let data = null;
+
+            try {
+                // Get data from token
+                data = token.split('.')[1];
+                // Base64 decode it
+                data = atob(data);
+                // Parse it as JSON
+                data = JSON.parse(data);
+                // Normalize data
+                data.companyId = data.companies[0];
+                delete data.companies;
+            } catch(ex) {
+                data = null;
+            }
 
             if (token) {
                 return Object.assign({
-                    loggedIn: true
+                    loggedIn: !!data,
+                    user: data
                 });
             }
 

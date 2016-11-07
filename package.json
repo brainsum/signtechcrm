@@ -21,5 +21,9 @@
     "redux": "^3.6.0",
     "redux-axios-middleware": "^3.0.0",
     "webpack": "^2.1.0-beta.25"
+  },
+  "dependencies": {
+    "react-addons-create-fragment": "^15.3.2",
+    "react-paginate": "^2.2.3"
   }
 }

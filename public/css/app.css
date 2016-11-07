@@ -5364,4 +5364,7 @@ body {
   text-transform: uppercase;
   border-bottom: 1px dashed #34373e; }
 
+.page-link {
+  cursor: pointer; }
+
 /*# sourceMappingURL=app.css.map */

@@ -21,13 +21,11 @@ class Navigation extends Component {
             ];
         }
 
-        let index = 0;
-
         return (
             <div>
                 <ul className="nav">
-                    {items.map(item => (
-                        <li key={index++} className="nav__item">
+                    {items.map((item, index) => (
+                        <li key={index} className="nav__item">
                             <Link
                                 className="nav__link"
                                 activeClassName="nav__link--active"
@@ -50,8 +48,8 @@ class Navigation extends Component {
                     />
                     <label className="nav-mobile__backdrop" htmlFor="hamburger"></label>
                     <ul className="nav-mobile__list">
-                        {items.map(item => (
-                            <li>
+                        {items.map((item, index) => (
+                            <li key={index}>
                                 <Link
                                     className="nav-mobile__link"
                                     activeClassName="nav-mobile__link--active"
