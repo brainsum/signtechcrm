@@ -11,8 +11,17 @@
 |
 */
 
-Route::any('/api', 'ApiController@forward');
+// API calls
+Route::group([
+    'namespace' => 'Api',
+    'prefix' => 'api'
+], function() {
+    // Own API functions
+    // ...
 
-Route::any('{all?}', function($any) {
-    return view('index');
-})->where('all', '.+');
+    // All other API calls forwarded to the SignTech API
+    Route::any('/', 'ForwardController@index');
+});
+
+// All other routes to the SPA, that will handle 404 too
+Route::any('{all?}', 'IndexController@index')->where('all', '.+');
