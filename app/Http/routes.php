@@ -15,9 +15,11 @@
 Route::group([
     'namespace' => 'Api',
     'prefix' => 'api'
-], function() {
-    // Own API functions
-    // ...
+], function () {
+    // Own API functions, protected by JWT validation middleware
+    Route::group(['middleware' => 'validate-jwt'], function () {
+        Route::get('/completed-forms', 'CompletedFormsController@index');
+    });
 
     // All other API calls forwarded to the SignTech API
     Route::any('/', 'ForwardController@index');
