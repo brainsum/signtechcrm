@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Redirect } from 'react-router';
+import AuthRedirect from 'app/components/utils/AuthRedirect';
 import { login, readApiJwt } from 'app/actions/auth';
 
 class LoginPage extends Component {
@@ -22,12 +22,10 @@ class LoginPage extends Component {
     }
 
     render() {
-        if (this.props.loggedIn) {
-            return <Redirect to='/my-forms' />;
-        }
-
         return (    
             <div className="container">
+                <AuthRedirect login={false} />
+
                 <h1 className="page-title">Log in</h1>
 
                 <form className="row" onSubmit={this.handleLogin}>
