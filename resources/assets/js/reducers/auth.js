@@ -12,11 +12,14 @@ const WRONG_EMAIL_OR_PASSWORD = 'Login failed, you typed in a wrong e-mail or pa
 const LOCAL_STORAGE_JWT_KEY = 'api_jwt';
 
 export default function(state = {
+    token: null,
     loggedIn: false,
     loading: false,
     error: null,
     user: null
 }, action) {
+    let token;
+
     switch (action.type) {
         // Login request started
         case AUTH_LOGIN_REQUEST:
@@ -29,11 +32,13 @@ export default function(state = {
             let newState = Object.assign({}, state, {
                 loading: false
             });
+            token = action.payload.data.token;
 
-            if (action.payload.data.token) {
-                localStorage.setItem(LOCAL_STORAGE_JWT_KEY, action.payload.data.token);
+            if (token) {
+                localStorage.setItem(LOCAL_STORAGE_JWT_KEY, token);
 
                 return Object.assign(newState, {
+                    token,
                     error: null
                 });
             }
@@ -58,7 +63,7 @@ export default function(state = {
                 error: UNKNOWN_ERROR
             });
         case AUTH_READ_API_JWT:
-            const token = localStorage.getItem(LOCAL_STORAGE_JWT_KEY);
+            token = localStorage.getItem(LOCAL_STORAGE_JWT_KEY);
             let data = null;
 
             try {
@@ -77,6 +82,7 @@ export default function(state = {
 
             if (token) {
                 return Object.assign({
+                    token: token,
                     loggedIn: !!data,
                     user: data
                 });
@@ -87,6 +93,7 @@ export default function(state = {
             localStorage.removeItem(LOCAL_STORAGE_JWT_KEY);
             
             return Object.assign({
+                token: null,
                 loggedIn: false
             });
         default:
