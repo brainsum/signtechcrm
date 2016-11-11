@@ -25,4 +25,14 @@ return [
 
     'http_auth_credentials' => env('SIGNTECH_API_HTTP_AUTH_CREDENTIALS', null),
 
+    /*
+    |--------------------------------------------------------------------------
+    | SignTech API's secret key that is use to sign JWT tokens
+    |--------------------------------------------------------------------------
+    |
+    | To validate the token on our side
+    |
+    */
+
+    'jwt_secret' => env('SIGNTECH_API_JWT_SECRET', null)
 ];
