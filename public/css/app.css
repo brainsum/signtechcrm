@@ -5347,6 +5347,17 @@ a.text-gray-dark:focus, a.text-gray-dark:hover {
     .footer a:hover {
       color: #00e96d; }
 
+.my-forms__table th,
+.my-forms__table td {
+  vertical-align: middle; }
+
+.my-forms__date {
+  width: 1%;
+  white-space: nowrap; }
+
+.my-forms__download-pdf {
+  width: 1%; }
+
 html {
   height: 100%; }
 

@@ -19,7 +19,7 @@ export default () => (
                 <Match pattern="/login" component={LoginPage} />
                 <Match pattern="/registration" component={RegistrationPage} />
                 {/*<Match pattern="/my-forms" component={MyFormsPage} />*/}
-                <Match pattern="/my-completed-forms" component={MyCompletedFormsPage} />
+                <Match pattern="/my-completed-forms/:page?" component={MyCompletedFormsPage} />
                 <Match pattern="/logout" component={LogoutPage} />
             </div>
         </BrowserRouter>

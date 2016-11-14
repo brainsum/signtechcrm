@@ -1,8 +1,10 @@
 import { combineReducers } from 'redux';
 import auth from 'app/reducers/auth';
-import myforms from 'app/reducers/myforms';
+import myCompletedForms from 'app/reducers/myCompletedForms';
+//import myForms from 'app/reducers/myForms';
 
 export default combineReducers({
     auth,
-    myforms
+    myCompletedForms
+    //myForms
 });

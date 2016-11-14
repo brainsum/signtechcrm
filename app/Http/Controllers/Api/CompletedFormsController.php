@@ -15,6 +15,15 @@ class CompletedFormsController extends Controller
      */
     public function index(Request $request)
     {
-        return CompletedForm::orderBy('id', 'desc')->paginate(15);
+        $page = $request->input('page');
+        $title = $request->input('title');
+
+        $completedForms = CompletedForm::orderBy('id', 'desc');
+
+        if ($title) {
+            $completedForms = $completedForms->where('title', 'like', sprintf('%%%s%%', $title));
+        }
+
+        return $completedForms->paginate(15, ['*'], 'page', $request->input('page') + 1);
     }
 }

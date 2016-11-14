@@ -1,0 +1,17 @@
+.my-forms {
+    &__table {
+        th,
+        td {
+            vertical-align: middle;
+        }
+    }
+
+    &__date {
+        width: 1%;
+        white-space: nowrap;
+    }
+
+    &__download-pdf {
+        width: 1%;
+    }
+}
