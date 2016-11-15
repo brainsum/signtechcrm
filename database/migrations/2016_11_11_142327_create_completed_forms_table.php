@@ -14,6 +14,7 @@ class CreateCompletedFormsTable extends Migration
     {
         Schema::create('completed_forms', function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('user_id');
             $table->integer('form_id');
             $table->string('title', 255);
             $table->dateTime('completed_at');

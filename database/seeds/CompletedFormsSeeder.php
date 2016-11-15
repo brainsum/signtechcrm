@@ -29,6 +29,7 @@ class CompletedFormsSeeder extends Seeder
 
         for($i = 0; $i < 1000; $i++) {
             $completedForm = new CompletedForm;
+            $completedForm->user_id = 1;
             $completedForm->form_id = 1;
             $completedForm->title = $forms[array_rand($forms)];
             $completedForm->completed_at = date('Y-m-d H:i:s', $lastDate - rand(0, 60 * 60 * 3));

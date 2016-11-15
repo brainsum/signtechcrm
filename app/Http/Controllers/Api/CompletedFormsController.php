@@ -15,10 +15,13 @@ class CompletedFormsController extends Controller
      */
     public function index(Request $request)
     {
+        $jwt = $request->input('jwt');
         $page = $request->input('page');
         $filters = $request->input('filters');
 
-        $completedForms = CompletedForm::orderBy('id', 'desc');
+        $completedForms = CompletedForm
+            ::orderBy('id', 'desc')
+            ->where('user_id', '=', $jwt->uid);
 
         if ($filters) {
             $filters = json_decode($filters, TRUE);
