@@ -80,6 +80,10 @@ return [
             'url_type'  => 'publicURL',
         ],
 
+        'pdfs' => [
+            'driver' => 'local',
+            'root'   => storage_path('app/pdfs')
+        ]
     ],
 
 ];

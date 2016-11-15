@@ -17,7 +17,6 @@ class CreateCompletedFormsTable extends Migration
             $table->integer('user_id');
             $table->integer('form_id');
             $table->string('title', 255);
-            $table->dateTime('completed_at');
             $table->text('data');
             $table->string('file', 255);
             $table->timestamps();

@@ -23,6 +23,8 @@ Route::group([
 
     // All other API calls forwarded to the SignTech API
     Route::any('/', 'ForwardController@index');
+    Route::post('/post', 'PostController@index');
+    Route::get('/test', 'TestController@index');
 });
 
 // All other routes to the SPA, that will handle 404 too
