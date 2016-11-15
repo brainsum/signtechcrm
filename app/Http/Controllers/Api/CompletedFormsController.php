@@ -35,6 +35,15 @@ class CompletedFormsController extends Controller
             }
         }
 
-        return $completedForms->paginate(15, ['*'], 'page', $request->input('page') + 1);
+        $fields = ['id', 'title', 'created_at', 'file'];
+        $result = $completedForms
+            ->paginate(15, $fields, 'page', $request->input('page') + 1)
+            ->toArray();
+
+        foreach ($result['data'] as &$item) {
+            $item['file'] = asset('pdfs/' . $item['file']);
+        }
+
+        return $result;
     }
 }

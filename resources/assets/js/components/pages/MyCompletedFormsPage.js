@@ -142,11 +142,10 @@ class MyCompletedFormsPage extends Component {
             return this.props.items.data.map(form => (
                 <tr key={form.id}>
                     <td>{form.title}</td>
-                    <td className="my-forms__date">{form.completed_at}</td>
+                    <td className="my-forms__date">{form.created_at}</td>
                     <td className="my-forms__download-pdf">
                         <a
-                            href="#"
-                            onClick={this.handlePDFClick}
+                            href={form.file}
                             className="btn btn-link"
                         >
                             Download PDF
