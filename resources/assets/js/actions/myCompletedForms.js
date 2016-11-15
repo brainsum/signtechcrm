@@ -4,7 +4,7 @@ export const MYCOMPLETEDFORMS_FETCH_FAILURE = 'MYCOMPLETEDFORMS_FETCH_FAILURE';
 
 export function fetch({
     page,
-    title = ''
+    filters
 }) {
     return {
         types: [ MYCOMPLETEDFORMS_FETCH, MYCOMPLETEDFORMS_FETCH_SUCCESS, MYCOMPLETEDFORMS_FETCH_FAILURE ],
@@ -14,7 +14,7 @@ export function fetch({
                 method: 'get',
                 params: {
                     page,
-                    title
+                    filters
                 }
             }
         }

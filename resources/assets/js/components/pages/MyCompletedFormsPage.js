@@ -3,48 +3,71 @@ import AuthRedirect from 'app/components/utils/AuthRedirect';
 import Paginate from 'app/components/utils/Paginate';
 import { fetch } from 'app/actions/myCompletedForms';
 import { connect } from 'react-redux';
-import { Redirect } from 'react-router';
+import { propTypes } from 'react-router';
+import isEqual from 'lodash/isEqual';
 
 class MyCompletedFormsPage extends Component {
-    constructor(props) {
+    constructor(props, context) {
         super(props);
 
-        this.state = {
-            shouldRedirect: false,
-            page: parseInt(props.params.page) || 0
-        };
+        this.state = this.getStateFromsProps(props);
 
-        this.fetchData();
         this.handleTitleChange = this.handleTitleChange.bind(this);
         this.handlePageClick = this.handlePageClick.bind(this);
     }
 
-    componentWillReceiveProps(nextProps) {
-        if (
-            this.props.params.page !== nextProps.params.page
-            || this.props.location.query.title !== nextProps.location.query.title
-        ) {
-            this.setState({
-                redirectToPage: false,
-                page: parseInt(nextProps.params.page) || 0
-            }, () => {
-                this.fetchData();
-            });
+    /**
+     * Get state from router props
+     */
+    getStateFromsProps(props) {
+        return {
+            page: parseInt(props.params.page) || 0,
+            filters: Object.assign({
+                title: ''
+            }, props.location.query)
         }
     }
 
-    componentWillUnomunt() {
-        clearTimeout(this.titleChangeTimeout);
+    /**
+     * Redirect after page or filters change
+     */
+    transitionTo() {
+        this.context.router.transitionTo({
+            pathname: `/my-completed-forms/${this.state.page || ''}`,
+            query: this.state.filters || {}
+        });
     }
 
     /**
      * Dispatches an action to the store to fetch posts
      */
-    fetchData() {
-        this.props.dispatch(fetch({
-            page: this.state.page,
-            title: ''
-        }));
+    fetch(transitionTo = false, delay = 0) {
+        transitionTo && this.transitionTo();
+
+        clearTimeout(this.fetchTimeout);
+        this.fetchTimeout = setTimeout(() => {
+            const { page, filters } = this.state; 
+            this.props.dispatch(fetch({ page, filters }));
+        }, delay);
+    }
+
+    componentDidMount() {
+        this.fetch();
+    }
+
+    /**
+     * Handles when the user click on the My completed forms menu item
+     * by resetting the state
+     */
+    componentWillReceiveProps(nextProps) {
+        const state = this.getStateFromsProps(nextProps);
+        if (!isEqual(state, this.state)) {
+            this.setState(state, this.fetch);
+        }
+    }
+
+    componentWillUnomunt() {
+        clearTimeout(this.fetchTimeout);
     }
 
     /**
@@ -52,28 +75,19 @@ class MyCompletedFormsPage extends Component {
      */
     handlePDFClick(e) {
         e.preventDefault();
-
-        alert('Not implemented yet.');
     }
 
     /**
      * Handle change of form title change input
      */
     handleTitleChange() {
-        // Timeout is throttling, we only should fetch data,
-        // when user finished typing
-        clearTimeout(this.titleChangeTimeout);
+        const title = this.refs.title.value;
+        const filters = Object.assign({}, this.state.filters, { title });
 
-        this.titleChangeTimeout = setTimeout(() => {
-            const title = this.refs.title.value;
-            
-            if (title !== this.state.title) {
-                this.setState({
-                    shouldRedirect: true,
-                    page: 0
-                });
-            }
-        }, 150);
+        this.setState({
+            page: 0,
+            filters
+        }, () => this.fetch(true, 150));
     }
 
     /**
@@ -82,18 +96,11 @@ class MyCompletedFormsPage extends Component {
      * @param {object} data from react-paginate
      */
     handlePageClick(data) {
-        // Change the state and the render method will do the redirect
-        this.setState({
-            shouldRedirect: true,
-            page: data.selected
-        });
+        const page = data.selected;
+        this.setState({ page }, () => this.fetch(true));
     }
 
     render() {
-        if (this.state.shouldRedirect) {
-            return this.renderRedirect();
-        }
-
         return (
             <div className="container my-forms">
                 <AuthRedirect login={true} />
@@ -113,6 +120,7 @@ class MyCompletedFormsPage extends Component {
                                         type="search"
                                         ref="title"
                                         onChange={this.handleTitleChange}
+                                        value={this.state.filters.title}
                                     />
                                 </div>
                             </th>
@@ -129,21 +137,8 @@ class MyCompletedFormsPage extends Component {
         );
     }
 
-    renderRedirect() {
-        const to = {
-            pathname: `/my-completed-forms/${this.state.page || ''}`,
-            query: {}
-        };
-
-        /*if (this.props.location.query.title) {
-            to.query.title = this.props.location.query.title;
-        }*/
-
-        return <Redirect to={to} />;
-    }
-
     renderItems() {
-        if (this.props.items) {
+        if (this.props.items && this.props.items.data.length) {
             return this.props.items.data.map(form => (
                 <tr key={form.id}>
                     <td>{form.title}</td>
@@ -161,16 +156,28 @@ class MyCompletedFormsPage extends Component {
             ));
         }
         else {
+            let message;
+
+            if (this.props.isLoading) {
+                message = 'Loading...';
+            }
+            else if(this.state.filters.title) {
+                message = 'No matches found for your criteria.'
+            }
+            else {
+                message = 'You have no completed forms yet.'
+            }
+
             return (
                 <tr>
-                    <td className="text-xs-center" colSpan="2">Loading...</td>
+                    <td className="text-xs-center" colSpan="2">{message}</td>
                 </tr>
             );
         }
     }
 
     renderPaginate() {
-        if (this.props.items) {
+        if (this.props.items && this.props.items.data.length) {
             return (
                 <div className="text-xs-center">
                     <Paginate
@@ -184,6 +191,10 @@ class MyCompletedFormsPage extends Component {
 
         return null;
     }
+}
+
+MyCompletedFormsPage.contextTypes = {
+    router: propTypes.routerContext
 }
 
 function mapStateToProps(state) {

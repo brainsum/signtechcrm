@@ -10,11 +10,10 @@ export default function(state = {
 }, action) {
     switch (action.type) {
         case MYCOMPLETEDFORMS_FETCH:
-            return {
+            return Object.assign({}, state, {
                 isLoading: true,
-                data: null,
                 error: false
-            };
+            });
         case MYCOMPLETEDFORMS_FETCH_SUCCESS:
             return {
                 isLoading: false,

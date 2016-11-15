@@ -1,6 +1,12 @@
 .my-forms {
     &__table {
-        th,
+        thead {
+            th {
+                vertical-align: top;
+                border-top: 0;
+            }
+        }
+
         td {
             vertical-align: middle;
         }

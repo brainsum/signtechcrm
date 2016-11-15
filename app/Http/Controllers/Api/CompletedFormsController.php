@@ -16,12 +16,20 @@ class CompletedFormsController extends Controller
     public function index(Request $request)
     {
         $page = $request->input('page');
-        $title = $request->input('title');
+        $filters = $request->input('filters');
 
         $completedForms = CompletedForm::orderBy('id', 'desc');
 
-        if ($title) {
-            $completedForms = $completedForms->where('title', 'like', sprintf('%%%s%%', $title));
+        if ($filters) {
+            $filters = json_decode($filters, TRUE);
+
+            foreach ($filters as $key => $value) {
+                switch ($key) {
+                    case 'title':
+                        $completedForms = $completedForms->where('title', 'like', sprintf('%%%s%%', $value));
+                        break;
+                }
+            }
         }
 
         return $completedForms->paginate(15, ['*'], 'page', $request->input('page') + 1);
