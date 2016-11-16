@@ -44,5 +44,6 @@ return [
 
     'from_mail' => env('SIGNTECH_API_FROM_MAIL', 'example@domain.tld'),
     'base_url' => env('SIGNTECH_API_BASE_URL', 'http://example.tld'),
-    'site_name' => env('SIGNTECH_API_SITE_NAME', 'Example site')
+    'site_name' => env('SIGNTECH_API_SITE_NAME', 'Example site'),
+    'company_id' => env('SIGNTECH_API_COMPANY_ID', NULL),
 ];

@@ -8,6 +8,7 @@ import SetNewPasswordPage from 'app/components/pages/SetNewPasswordPage';
 import RegistrationPage from 'app/components/pages/RegistrationPage';
 import MyCompletedFormsPage from 'app/components/pages/MyCompletedFormsPage';
 import LogoutPage from 'app/components/pages/LogoutPage';
+import InvitePage from 'app/components/pages/InvitePage';
 import Footer from 'app/components/partials/Footer';
 
 export default () => (
@@ -22,6 +23,7 @@ export default () => (
                 <Match pattern="/user/reset/:userId/:timestamp/:hashedPassword" component={SetNewPasswordPage} />
                 <Match pattern="/registration" component={RegistrationPage} />
                 <Match pattern="/my-completed-forms/:page?" component={MyCompletedFormsPage} />
+                <Match pattern="/invite" component={InvitePage} />
                 <Match pattern="/logout" component={LogoutPage} />
             </div>
         </BrowserRouter>
