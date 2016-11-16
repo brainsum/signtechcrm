@@ -1,29 +1,33 @@
-export const AUTH_FORGOTPASSWORD_REQUEST = 'AUTH_FORGOTPASSWORD_REQUEST';
-export const AUTH_FORGOTPASSWORD_SUCCESS = 'AUTH_FORGOTPASSWORD_SUCCESS';
-export const AUTH_FORGOTPASSWORD_FAILURE = 'AUTH_FORGOTPASSWORD_FAILURE';
+import qs from 'qs';
+
+export const SETNEWPASSWORD_REQUEST = 'SETNEWPASSWORD_REQUEST';
+export const SETNEWPASSWORD_SUCCESS = 'SETNEWPASSWORD_SUCCESS';
+export const SETNEWPASSWORD_FAILURE = 'SETNEWPASSWORD_FAILURE';
 
 const errors = {
     // SIGNTECH_API_1_1_PARAMETER_FAILED
     '-1': 'Unexcepted error. Please try again later.',
     // SIGNTECH_API_1_1_USER_NOT_EXISTS
-    '-3': 'User doesn\'t exists with this e-mail address.',
-    // SIGNTECH_API_1_1_NEW_PASSWORD_REQUEST_FAILED
-    '-4': 'Unexcepted error. Please try again later.'
+    '-3': 'You have already set a new password with this link.',
+    // SIGNTECH_API_1_1_ONE_TIME_LINK_EXPIRED
+    '-5': 'The password request link expired. Please request a new password request.',
+    // SIGNTECH_API_1_1_USER_PASSWORD_MODIFY_FAILED
+    '-6': 'Unexcepted error. Please try again later.'
 };
 
 export default function reducer(state = {
     isLoading: false,
-    success: false,
+    success: true,
     error: false
 }, action) {
     switch (action.type) {
-        case AUTH_FORGOTPASSWORD_REQUEST:
+        case SETNEWPASSWORD_REQUEST:
             return {
                 isLoading: true,
                 success: false,
                 error: false
             };
-        case AUTH_FORGOTPASSWORD_SUCCESS:
+        case SETNEWPASSWORD_SUCCESS:
             const response = action.payload.data;
 
             if (response !== 1) {
@@ -40,7 +44,7 @@ export default function reducer(state = {
                     error: false
                 }
             }
-        case AUTH_FORGOTPASSWORD_FAILURE:
+        case SETNEWPASSWORD_FAILURE:
             return {
                 isLoading: false,
                 success: false,
@@ -51,19 +55,25 @@ export default function reducer(state = {
     }
 }
 
-/**
- * Request new password action creator
- *
- * @param {String} email address
- */
-export function request(email) {
+export function set({
+    userId,
+    timestamp,
+    hashedPassword,
+    password
+}) {
     return {
-        types: [AUTH_FORGOTPASSWORD_REQUEST, AUTH_FORGOTPASSWORD_SUCCESS, AUTH_FORGOTPASSWORD_FAILURE],
+        types: [SETNEWPASSWORD_REQUEST, SETNEWPASSWORD_SUCCESS, SETNEWPASSWORD_FAILURE],
         payload: {
             request: {
-                url: '/forgot-password',
+                url: '/',
                 method: 'post',
-                data: { email }
+                data: qs.stringify({
+                    'function': 'modify_password',
+                    uid: userId,
+                    timestamp,
+                    hashed_pass: hashedPassword,
+                    password
+                })
             }
         }
     }

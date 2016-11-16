@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import AuthRedirect from 'app/components/utils/AuthRedirect';
-import { request } from 'app/ducks/forgotPassword';
+import { set } from 'app/ducks/setNewPassword';
+import { Link } from 'react-router';
 
-class RequestNewPasswordPage extends Component {
+class SetNewPasswordPage extends Component {
     constructor(props) {
         super(props);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -11,25 +11,27 @@ class RequestNewPasswordPage extends Component {
 
     handleSubmit(e) {
         e.preventDefault();
-        this.props.dispatch(request(this.refs.email.value));
+
+        const { userId, timestamp, hashedPassword } = this.props.params;
+        const password = this.refs.password.value;
+
+        this.props.dispatch(set({ userId, timestamp, hashedPassword, password }));
     }
 
     render() {
         return (
             <div className="container">
-                <AuthRedirect login={false} />
-
-                <h1 className="page-title">Request new password</h1>
+                <h1 className="page-title">Set new password</h1>
 
                 <form className="row" onSubmit={this.handleSubmit}>
                     <div className="col-md-6 offset-md-3 col-lg-4 offset-lg-4">
                         <div className="form-group">
-                            <label htmlFor="email">E-mail</label>
+                            <label htmlFor="password">New password</label>
                             <input
                                 className="form-control"
-                                id="email"
-                                type="email"
-                                ref="email"
+                                id="password"
+                                type="password"
+                                ref="password"
                                 required
                             />
                         </div>
@@ -39,7 +41,7 @@ class RequestNewPasswordPage extends Component {
                                 className="btn btn-primary btn-block"
                                 disabled={this.props.isLoading}
                             >
-                                {this.props.isLoading ? 'Loading...' : 'Continue'}
+                                {this.props.isLoading ? 'Saving...' : 'Save password'}
                             </button>
                         </div>
 
@@ -54,12 +56,13 @@ class RequestNewPasswordPage extends Component {
         if (this.props.success) {
             return (
                 <div className="alert alert-success">
-                    An e-mail has been sent to {this.refs.email.value}.
+                    Your new password has been saved. Now you can <Link to="/login">login</Link> using your e-mail address and the new password.
                 </div>
             )
         }
         else if (this.props.error) {
             return <div className="alert alert-danger">
+                <strong>Error</strong>
                 {this.props.error}
             </div>
         }
@@ -69,8 +72,8 @@ class RequestNewPasswordPage extends Component {
 }
 
 function mapStateToProps(state) {
-    const { isLoading, success, error } = state.forgotPassword;
+    const { isLoading, success, error } = state.setNewPassword;
     return { isLoading, success, error };
 }
 
-export default connect(mapStateToProps)(RequestNewPasswordPage);
+export default connect(mapStateToProps)(SetNewPasswordPage);
