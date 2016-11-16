@@ -32,7 +32,7 @@ class CompletedFormsSeeder extends Seeder
             $completedForm->user_id = 1;
             $completedForm->form_id = 1;
             $completedForm->title = $forms[array_rand($forms)];
-            $completedForm->completed_at = date('Y-m-d H:i:s', $lastDate - rand(0, 60 * 60 * 3));
+            $completedForm->created_at = date('Y-m-d H:i:s', $lastDate - rand(0, 60 * 60 * 3));
             $completedForm->data = [];
             $completedForm->file = 'blank.pdf';
             $completedForm->save();
