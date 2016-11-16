@@ -3,7 +3,10 @@ import {
     AUTH_LOGIN_SUCCESS,
     AUTH_LOGIN_FAILURE,
     AUTH_READ_API_JWT,
-    AUTH_LOGOUT
+    AUTH_LOGOUT,
+    AUTH_FORGOTPASSWORD_REQUEST,
+    AUTH_FORGOTPASSWORD_SUCCESS,
+    AUTH_FORGOTPASSWORD_FAILURE
 } from 'app/actions/auth';
 
 const UNKNOWN_ERROR = 'Unknown error. Please try again.';
@@ -16,7 +19,7 @@ export default function(state = {
     loggedIn: false,
     loading: false,
     error: null,
-    user: null
+    user: null,
 }, action) {
     let token;
 
@@ -74,8 +77,8 @@ export default function(state = {
                 // Parse it as JSON
                 data = JSON.parse(data);
                 // Normalize data
-                data.companyId = data.companies[0];
-                delete data.companies;
+                data.companyId = parseInt(data.company);
+                delete data.company;
             } catch(ex) {
                 data = null;
             }

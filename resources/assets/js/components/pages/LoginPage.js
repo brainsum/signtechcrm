@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import AuthRedirect from 'app/components/utils/AuthRedirect';
 import { login, readApiJwt } from 'app/actions/auth';
+import { Link } from 'react-router';
 
 class LoginPage extends Component {
     constructor(props) {
@@ -56,12 +57,18 @@ class LoginPage extends Component {
                             </div>
                         </div>
 
-                        <button
-                            className="btn btn-primary btn-block"
-                            disabled={this.props.loading}
-                        >
-                            {this.props.loading ? 'Logging in ...' : 'Login'}
-                        </button>
+                        <div className="form-group">
+                            <button
+                                className="btn btn-primary btn-block"
+                                disabled={this.props.loading}
+                            >
+                                {this.props.loading ? 'Logging in ...' : 'Login'}
+                            </button>
+                        </div>
+
+                        <div className="text-xs-center">
+                            <Link to="/request-new-password">Request new password</Link>
+                        </div>
 
                         {this.renderError()}
                     </div>

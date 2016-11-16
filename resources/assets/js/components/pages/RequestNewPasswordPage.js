@@ -1,0 +1,78 @@
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import AuthRedirect from 'app/components/utils/AuthRedirect';
+import { request } from 'app/ducks/forgotPassword';
+
+class RequestNewPasswordPage extends Component {
+    constructor(props) {
+        super(props);
+        this.handleSubmit = this.handleSubmit.bind(this);
+    }
+
+    handleSubmit(e) {
+        e.preventDefault();
+        this.props.dispatch(request(this.refs.email.value));
+    }
+
+    render() {
+        return (
+            <div className="container">
+                <AuthRedirect login={false} />
+
+                <h1 className="page-title">Request New Password</h1>
+
+                <form className="row" onSubmit={this.handleSubmit}>
+                    <div className="col-md-6 offset-md-3 col-lg-4 offset-lg-4">
+                        <div className="form-group">
+                            <label htmlFor="email">E-mail</label>
+                            <div className="input-group">
+                                <input
+                                    className="form-control"
+                                    id="email"
+                                    type="email"
+                                    ref="email"
+                                    required
+                                />
+                            </div>
+                        </div>
+
+                        <div className="form-group">
+                            <button
+                                className="btn btn-primary btn-block"
+                                disabled={this.props.isLoading}
+                            >
+                                {this.props.isLoading ? 'Loading...' : 'Continue'}
+                            </button>
+                        </div>
+
+                        {this.renderResult()}
+                    </div>
+                </form>
+            </div>
+        );
+    }
+
+    renderResult() {
+        if (this.props.success) {
+            return (
+                <div className="alert alert-success">
+                    An e-mail has been sent to {this.refs.email.value}.
+                </div>
+            )
+        }
+        else if (this.props.error) {
+            return <div className="alert alert-danger">
+                {this.props.error}
+            </div>
+        }
+
+        return null;
+    }
+}
+
+function mapStateToProps(state) {
+    const { isLoading, success, error } = state.forgotPassword;
+    return { isLoading, success, error };
+}
+
+export default connect(mapStateToProps)(RequestNewPasswordPage);

@@ -34,5 +34,15 @@ return [
     |
     */
 
-    'jwt_secret' => env('SIGNTECH_API_JWT_SECRET', null)
+    'jwt_secret' => env('SIGNTECH_API_JWT_SECRET', null),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Data for e-mail sending through SignTech API
+    |--------------------------------------------------------------------------
+    */
+
+    'from_mail' => env('SIGNTECH_API_FROM_MAIL', 'example@domain.tld'),
+    'base_url' => env('SIGNTECH_API_BASE_URL', 'http://example.tld'),
+    'site_name' => env('SIGNTECH_API_SITE_NAME', 'Example site')
 ];

@@ -24,6 +24,7 @@ Route::group([
     // All other API calls forwarded to the SignTech API
     Route::any('/', 'ForwardController@index');
     Route::post('/post', 'PostController@index');
+    Route::post('/forgot-password', 'ForgotPasswordController@index');
     Route::get('/test', 'TestController@index');
 });
 
