@@ -30,7 +30,7 @@ class ValidateJwt
         try {
             $exploded = explode(' ', $authorization);
             $jwt = $exploded[1];
-            $decoded = JWT::decode($jwt, config('signtechapi.jwt_secret'), ['HS256']);
+            $userData = JWT::decode($jwt, config('signtechapi.jwt_secret'), ['HS256']);
         } catch(\Exception $exception) {
             return Response::make([
                 'error' => 'Invalid token.'
@@ -38,7 +38,8 @@ class ValidateJwt
         }
 
         Request::merge([
-            'jwt' => $decoded
+            'jwt' => $jwt,
+            'userData' => $userData
         ]);
 
         return $next($request);
