@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import AuthRedirect from 'app/components/utils/AuthRedirect';
 import Paginate from 'app/components/utils/Paginate';
-import { fetch } from 'app/actions/myCompletedForms';
+import { fetch } from 'app/ducks/myCompletedForms';
 import { connect } from 'react-redux';
 import { propTypes } from 'react-router';
 import isEqual from 'lodash/isEqual';

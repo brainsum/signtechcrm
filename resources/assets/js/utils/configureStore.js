@@ -1,11 +1,11 @@
 import { createStore, applyMiddleware } from 'redux';
-import reducers from 'app/reducers/index';
+import ducks from 'app/ducks/index';
 import { getMiddleware, addInterceptorWithStore } from 'app/utils/configureAxios';
-import { readApiJwt } from 'app/actions/auth';
+import { readApiJwt } from 'app/ducks/auth';
 
 export default function configureStore() {
     const store = createStore(
-        reducers,
+        ducks,
         applyMiddleware(
             getMiddleware()
         )

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import AuthRedirect from 'app/components/utils/AuthRedirect';
-import { login, readApiJwt } from 'app/actions/auth';
+import { login, readApiJwt } from 'app/ducks/auth';
 import { Link } from 'react-router';
 
 class LoginPage extends Component {
