@@ -96,10 +96,20 @@ class PostController extends Controller
     private function downloadFile($path) {
         $path = base64_decode($path);
         $filename = basename($path);
-        $content = file_get_contents($path);
+
+        // HTTP auth if needed
+        $options = [];
+        $http_auth_credentials = config('signtechapi.http_auth_credentials');
+        if ($http_auth_credentials) {
+            $options['http'] = [
+                'header' => 'Authorization: Basic ' . base64_encode($http_auth_credentials)
+            ];
+        }
+
+        $content = file_get_contents($path, null, stream_context_create($options));
 
         if (!$content) {
-            return FALSE;
+            return false;
         }
         
         Storage::disk('pdfs')->put($filename, $content);
