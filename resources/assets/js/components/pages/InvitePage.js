@@ -17,9 +17,9 @@ class InvitePage extends Component {
 
     getNewUser() {
         return {
-            email: 'example@domain.tld',
-            lastName: 'John',
-            firstName: 'Doe',
+            email: '',
+            lastName: '',
+            firstName: '',
             phone: ''
         }
     }

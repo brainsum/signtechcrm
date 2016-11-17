@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use GuzzleHttp\Client;
+use Mail;
 
 class InviteController extends Controller
 {
@@ -51,9 +52,21 @@ class InviteController extends Controller
 
         $client = new Client;
         $response = $client->post(config('signtechapi.url'), $data);
+        $response = json_decode($response->getBody(), true);
 
-        return json_decode($response->getBody(), TRUE);
+        if ($response === 1) {
+            $name = sprintf('%s %s', $user['firstName'], $user['lastName']);
 
-        // @todo - if registrate was succcessful, send e-mail to the user with the password
+            Mail::send('emails.invite', [
+                'name' => $name,
+                'siteName' => config('signtechapi.site_name'),
+                'baseUrl' => config('signtechapi.base_url'),
+                'password' => $password
+            ], function($message)  use($name, $user) {
+                $message->to($user['email'], $name);
+            });
+        }
+
+        return $response;
     }
 }

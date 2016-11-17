@@ -54,7 +54,10 @@ return [
     |
     */
 
-    'from' => ['address' => null, 'name' => null],
+    'from' => [
+        'address' => env('SIGNTECH_API_FROM_MAIL', 'example@domain.tld'),
+        'name' => env('SIGNTECH_API_SITE_NAME', 'Example site')
+    ],
 
     /*
     |--------------------------------------------------------------------------
