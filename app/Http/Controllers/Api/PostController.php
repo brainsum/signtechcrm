@@ -19,13 +19,32 @@ class PostController extends Controller
      */
     public function index(Request $request)
     {
+        $json = $request->input('json');
+        $filePath = $request->input('file');
+
+        if (!$json) {
+            return response(['error' => 'Missing json parameter'], 400);
+        }
+
+        if (!$filePath) {
+            return response(['error' => 'Missing file parameter'], 400);
+        }
+
+        $fileName = $this->downloadFile($filePath);
+
+        if (!$fileName) {
+            return response(['error' => 'Couldn\'t download the file'], 400);
+        }
+
         $completedForm = new CompletedForm;
-        $completedForm->user_id = 1; // @todo - I should get this too
-        $completedForm->form_id = $request->input('json')['form_id'];
+        $completedForm->user_id = NULL;
+        $completedForm->form_id = $json['form_id'];
         $completedForm->title = $this->getFormTitleByFormId($completedForm->form_id);
-        $completedForm->data = $this->getData($request->input('json'));
-        $completedForm->file = $this->downloadFile($request->input('file'));
+        $completedForm->data = $this->getData($json);
+        $completedForm->file = $fileName;
         $completedForm->save();
+
+        return ['success' => true];
     }
 
     /**
@@ -72,15 +91,18 @@ class PostController extends Controller
      * Download and store file locally
      *
      * @param string $file
-     * @param string local filename
+     * @return string|boolean false on error
      */
     private function downloadFile($path) {
         $path = base64_decode($path);
         $filename = basename($path);
         $content = file_get_contents($path);
+
+        if (!$content) {
+            return FALSE;
+        }
         
         Storage::disk('pdfs')->put($filename, $content);
-
         return $filename;
     }
 }
