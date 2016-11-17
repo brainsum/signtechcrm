@@ -9,6 +9,8 @@ use App\Models\CompletedForm;
 use Carbon\Carbon;
 use GuzzleHttp\Client;
 use \Storage;
+use \Firebase\JWT\JWT;
+use Illuminate\Support\Facades\Log;
 
 class PostController extends Controller
 {
@@ -37,14 +39,14 @@ class PostController extends Controller
         }
 
         $userId = null;
-        $jwt = $request->input('jwt');
-        if ($jwt) {
-            $userData = JWT::decode($jwt, config('signtechapi.jwt_secret'), ['HS256']);
-            $userId = $userData->iud;
+        $token = $request->input('token');
+        if ($token) {
+            $userData = JWT::decode($token['token'], config('signtechapi.jwt_secret'), ['HS256']);
+            $userId = $userData->uid;
         }
 
         $completedForm = new CompletedForm;
-        $completedForm->user_id = NULL;
+        $completedForm->user_id = $userId;
         $completedForm->form_id = $json['form_id'];
         $completedForm->title = $this->getFormTitleByFormId($completedForm->form_id);
         $completedForm->data = $this->getData($json);
