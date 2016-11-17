@@ -76,6 +76,8 @@ export default function reducer(state = {
                 // Normalize data
                 data.companyId = parseInt(data.company);
                 delete data.company;
+                data.isAdmin = !!data.admin;
+                delete data.admin;
             } catch(ex) {
                 data = null;
             }

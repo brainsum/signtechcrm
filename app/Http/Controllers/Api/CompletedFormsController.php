@@ -20,11 +20,12 @@ class CompletedFormsController extends Controller
         $filters = $request->input('filters');
 
         $completedForms = CompletedForm
-            ::orderBy('id', 'desc')
-            // Own forms and ...
-            ->where('user_id', '=', $userData->uid)
-            // ... common forms owned by nobody
-            ->orWhereNull('user_id');
+            ::orderBy('id', 'desc');
+
+        // Not admin users can see only their own forms
+        if (!$userData->isAdmin) {
+            $completedForms = $completedForms->where('user_id', '=', $userData->uid);
+        }
 
         if ($filters) {
             $filters = json_decode($filters, TRUE);

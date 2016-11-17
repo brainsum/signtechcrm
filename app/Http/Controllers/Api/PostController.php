@@ -36,6 +36,13 @@ class PostController extends Controller
             return response(['error' => 'Couldn\'t find the file'], 400);
         }
 
+        $userId = null;
+        $jwt = $request->input('jwt');
+        if ($jwt) {
+            $userData = JWT::decode($jwt, config('signtechapi.jwt_secret'), ['HS256']);
+            $userId = $userData->iud;
+        }
+
         $completedForm = new CompletedForm;
         $completedForm->user_id = NULL;
         $completedForm->form_id = $json['form_id'];

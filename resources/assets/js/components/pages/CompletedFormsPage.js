@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import AuthRedirect from 'app/components/utils/AuthRedirect';
 import Paginate from 'app/components/utils/Paginate';
-import { fetch } from 'app/ducks/myCompletedForms';
+import { fetch } from 'app/ducks/completedForms';
 import { connect } from 'react-redux';
 import { propTypes } from 'react-router';
 import isEqual from 'lodash/isEqual';
 
-class MyCompletedFormsPage extends Component {
+class CompletedFormsPage extends Component {
     constructor(props, context) {
         super(props);
 
@@ -33,7 +33,7 @@ class MyCompletedFormsPage extends Component {
      */
     transitionTo() {
         this.context.router.transitionTo({
-            pathname: `/my-completed-forms/${this.state.page || ''}`,
+            pathname: `/completed-forms/${this.state.page || ''}`,
             query: this.state.filters || {}
         });
     }
@@ -105,7 +105,7 @@ class MyCompletedFormsPage extends Component {
             <div className="container my-forms">
                 <AuthRedirect login={true} />
 
-                <h1 className="page-title">My completed forms</h1>
+                <h1 className="page-title">{this.props.isAdmin ? 'Completed forms' : 'My completed forms'}</h1>
 
                 <table className="table table-striped table-hover my-forms__table">
                     <thead>
@@ -192,15 +192,16 @@ class MyCompletedFormsPage extends Component {
     }
 }
 
-MyCompletedFormsPage.contextTypes = {
+CompletedFormsPage.contextTypes = {
     router: propTypes.routerContext
 }
 
 function mapStateToProps(state) {
     return {
-        isLoading: state.myCompletedForms.isLoading,
-        items: state.myCompletedForms.data
+        isAdmin: state.auth.user && state.auth.user.isAdmin,
+        isLoading: state.completedForms.isLoading,
+        items: state.completedForms.data
     }
 }
 
-export default connect(mapStateToProps)(MyCompletedFormsPage);
+export default connect(mapStateToProps)(CompletedFormsPage);

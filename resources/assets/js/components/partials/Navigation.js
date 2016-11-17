@@ -8,11 +8,14 @@ class Navigation extends Component {
 
         if (this.props.loggedIn) {
             items = [
-                { to: '/my-completed-forms', title: 'My completed forms' },
-                { to: '/my-account', title: 'My account' },
-                { to: '/invite', title: 'Invite' },
+                { to: '/completed-forms', title: this.props.isAdmin ? 'Completed forms' : 'My completed forms' },
+                /*{ to: '/my-account', title: 'My account' },*/
                 { to: '/logout', title: 'Logout' }
             ];
+
+            if (this.props.isAdmin) {
+                items.splice(1, 0, { to: '/invite', title: 'Invite' });
+            }
         }
         else {
             items = [
@@ -68,7 +71,8 @@ class Navigation extends Component {
 
 function mapStateToProps(state) {
     return {
-        loggedIn: state.auth.loggedIn
+        loggedIn: state.auth.loggedIn,
+        isAdmin: state.auth.user && state.auth.user.isAdmin
     }
 }
 

@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import AuthRedirect from 'app/components/utils/AuthRedirect';
 import { invite, clear } from 'app/ducks/invite';
 import { connect } from 'react-redux';
 import cloneDeep from 'lodash/cloneDeep';
@@ -65,6 +66,7 @@ class InvitePage extends Component {
     render() {
         return (
             <div className="container">
+                <AuthRedirect login={true} admin={true} />
                 <h1 className="page-title">Invite users</h1>
 
                 <form onSubmit={this.handleSubmit}>

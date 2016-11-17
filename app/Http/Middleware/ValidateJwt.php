@@ -37,6 +37,8 @@ class ValidateJwt
             ], 403);
         }
 
+        $userData->isAdmin = !!$userData->admin;
+
         Request::merge([
             'jwt' => $jwt,
             'userData' => $userData
