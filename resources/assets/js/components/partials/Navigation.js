@@ -8,9 +8,8 @@ class Navigation extends Component {
 
         if (this.props.loggedIn) {
             items = [
-                /*{ to: '/my-forms', title: 'My forms' },*/
                 { to: '/my-completed-forms', title: 'My completed forms' },
-                { to: '/users', title: 'Users' },
+                { to: '/my-account', title: 'My account' },
                 { to: '/invite', title: 'Invite' },
                 { to: '/logout', title: 'Logout' }
             ];
