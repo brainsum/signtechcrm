@@ -21,7 +21,10 @@ class CompletedFormsController extends Controller
 
         $completedForms = CompletedForm
             ::orderBy('id', 'desc')
-            ->where('user_id', '=', $userData->uid);
+            // Own forms and ...
+            ->where('user_id', '=', $userData->uid)
+            // ... common forms owned by nobody
+            ->orWhereNull('user_id');
 
         if ($filters) {
             $filters = json_decode($filters, TRUE);

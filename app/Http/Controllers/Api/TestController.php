@@ -32,8 +32,8 @@ class TestController extends Controller
         // Send to API
         $data = [
             'form_params' => [
-                'json' => ['form_id' => $form['form_id']],
-                'file' => base64_encode('https://www.signtechforms.com/sites/all/themes/st_frontend/images/base/st_logo_green.png')
+                'json' => json_encode(['form_id' => $form['form_id']]),
+                'file' => base64_encode('blabblalbal.com')
             ]
         ];
 

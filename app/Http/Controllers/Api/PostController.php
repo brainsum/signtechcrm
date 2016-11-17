@@ -19,11 +19,11 @@ class PostController extends Controller
      */
     public function index(Request $request)
     {
-        $json = $request->input('json');
+        $json = json_decode($request->input('json'), true);
         $filePath = $request->input('file');
 
         if (!$json) {
-            return response(['error' => 'Missing json parameter'], 400);
+            return response(['error' => 'Missing or invalid json parameter'], 400);
         }
 
         if (!$filePath) {
@@ -33,7 +33,7 @@ class PostController extends Controller
         $fileName = $this->downloadFile($filePath);
 
         if (!$fileName) {
-            return response(['error' => 'Couldn\'t download the file'], 400);
+            return response(['error' => 'Couldn\'t find the file'], 400);
         }
 
         $completedForm = new CompletedForm;
@@ -106,12 +106,12 @@ class PostController extends Controller
             ];
         }
 
-        $content = file_get_contents($path, null, stream_context_create($options));
-
-        if (!$content) {
+        try {
+            $content = file_get_contents($path, null, stream_context_create($options));
+        } catch(\Exception $err) {
             return false;
         }
-        
+
         Storage::disk('pdfs')->put($filename, $content);
         return $filename;
     }
