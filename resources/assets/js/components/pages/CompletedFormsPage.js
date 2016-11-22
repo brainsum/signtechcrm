@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import AuthRedirect from 'app/components/utils/AuthRedirect';
+import auth from 'app/components/utils/auth';
 import Paginate from 'app/components/utils/Paginate';
 import { fetch } from 'app/ducks/completedForms';
 import { connect } from 'react-redux';
@@ -47,7 +47,7 @@ class CompletedFormsPage extends Component {
         clearTimeout(this.fetchTimeout);
         this.fetchTimeout = setTimeout(() => {
             const { page, filters } = this.state; 
-            this.props.dispatch(fetch({ page, filters }));
+            this.props.fetch({ page, filters });
         }, delay);
     }
 
@@ -103,8 +103,6 @@ class CompletedFormsPage extends Component {
     render() {
         return (
             <div className="container my-forms">
-                <AuthRedirect login={true} />
-
                 <h1 className="page-title">{this.props.isAdmin ? 'Completed forms' : 'My completed forms'}</h1>
 
                 <table className="table table-striped table-hover my-forms__table">
@@ -204,4 +202,6 @@ function mapStateToProps(state) {
     }
 }
 
-export default connect(mapStateToProps)(CompletedFormsPage);
+CompletedFormsPage = connect(mapStateToProps, { fetch })(CompletedFormsPage);
+CompletedFormsPage = auth(CompletedFormsPage);
+export default CompletedFormsPage;

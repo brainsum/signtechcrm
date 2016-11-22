@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import AuthRedirect from 'app/components/utils/AuthRedirect';
+import auth from 'app/components/utils/auth';
 import { invite, clear } from 'app/ducks/invite';
 import { connect } from 'react-redux';
 import cloneDeep from 'lodash/cloneDeep';
@@ -39,7 +39,7 @@ class InvitePage extends Component {
     }
 
     handleAddNewUser() {
-        this.props.dispatch(clear());
+        this.props.clear();
 
         this.setState({
             users: this.state.users.concat([ this.getNewUser() ])
@@ -60,13 +60,12 @@ class InvitePage extends Component {
      handleSubmit(e) {
         e.preventDefault();
 
-        this.props.dispatch(invite(this.state.users));
+        this.props.invite(this.state.users);
     }
 
     render() {
         return (
             <div className="container">
-                <AuthRedirect login={true} admin={true} />
                 <h1 className="page-title">Invite users</h1>
 
                 <form onSubmit={this.handleSubmit}>
@@ -183,4 +182,8 @@ function mapStateToProps(state) {
     return { isLoading, results, error };
 }
 
-export default connect(mapStateToProps)(InvitePage);
+InvitePage = connect(mapStateToProps, { invite, clear })(InvitePage);
+InvitePage = auth(InvitePage, {
+    admin: true
+});
+export default InvitePage;

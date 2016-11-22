@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import AuthRedirect from 'app/components/utils/AuthRedirect';
+import auth from 'app/components/utils/auth';
 import { login, readApiJwt } from 'app/ducks/auth';
 import { Link } from 'react-router';
 
@@ -14,19 +14,17 @@ class LoginPage extends Component {
     handleLogin(e) {
         e.preventDefault();
 
-        this.props.dispatch(login(
+        this.props.login(
             this.refs.email.value,
             this.refs.password.value
-        )).then(() => {
-            this.props.dispatch(readApiJwt());
+        ).then(() => {
+            this.props.readApiJwt();
         });
     }
 
     render() {
         return (    
             <div className="container">
-                <AuthRedirect login={false} />
-
                 <h1 className="page-title">Log in</h1>
 
                 <form className="row" onSubmit={this.handleLogin}>
@@ -93,10 +91,11 @@ class LoginPage extends Component {
 
 function mapStateToProps(state) {
     return {
-        loggedIn: state.auth.loggedIn,
         loading: state.auth.loading,
         error: state.auth.error
     }
 }
 
-export default connect(mapStateToProps)(LoginPage);
+LoginPage = connect(mapStateToProps, { login, readApiJwt })(LoginPage);
+LoginPage = auth(LoginPage, { login: false });
+export default LoginPage;

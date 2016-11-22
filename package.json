@@ -23,6 +23,8 @@
     "webpack": "^2.1.0-beta.25"
   },
   "dependencies": {
+    "babel-plugin-transform-es2015-destructuring": "^6.19.0",
+    "babel-plugin-transform-object-rest-spread": "^6.19.0",
     "lodash": "^4.17.1",
     "react-addons-create-fragment": "^15.3.2",
     "react-paginate": "^2.2.3"

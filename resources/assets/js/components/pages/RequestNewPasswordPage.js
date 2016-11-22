@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import AuthRedirect from 'app/components/utils/AuthRedirect';
+import auth from 'app/components/utils/auth';
 import { request } from 'app/ducks/forgotPassword';
 
 class RequestNewPasswordPage extends Component {
@@ -11,14 +11,12 @@ class RequestNewPasswordPage extends Component {
 
     handleSubmit(e) {
         e.preventDefault();
-        this.props.dispatch(request(this.refs.email.value));
+        this.props.request(this.refs.email.value);
     }
 
     render() {
         return (
             <div className="container">
-                <AuthRedirect login={false} />
-
                 <h1 className="page-title">Request new password</h1>
 
                 <form className="row" onSubmit={this.handleSubmit}>
@@ -73,4 +71,6 @@ function mapStateToProps(state) {
     return { isLoading, success, error };
 }
 
-export default connect(mapStateToProps)(RequestNewPasswordPage);
+RequestNewPasswordPage = connect(mapStateToProps, { request })(RequestNewPasswordPage);
+RequestNewPasswordPage = auth(RequestNewPasswordPage, { login: false });
+export default RequestNewPasswordPage;

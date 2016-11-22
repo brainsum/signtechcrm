@@ -1,18 +1,14 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { logout } from 'app/ducks/auth';
-import { Redirect } from 'react-router';
+import auth from 'app/components/utils/auth';
 
-class LogoutPage extends Component {
-    constructor(props) {
-        super(props);
-
-        this.props.dispatch(logout());
-    }
-
-    render() {
-        return <Redirect to="/login" />;
-    }
+let LogoutPage = ({ logout }) => {
+    logout();
+    return null;
 }
 
-export default connect()(LogoutPage);
+LogoutPage = connect(null, { logout })(LogoutPage);
+LogoutPage = auth(LogoutPage);
+
+export default LogoutPage;

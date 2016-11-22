@@ -1,12 +1,10 @@
 import React, { Component } from 'react';
-import AuthRedirect from 'app/components/utils/AuthRedirect';
+import auth from 'app/components/utils/auth';
 
-export default class RegistrationPage extends Component {
+class RegistrationPage extends Component {
     render() {
         return (
             <div className="container">
-                <AuthRedirect login={false} />
-                
                 <h1 className="page-title">Registration</h1>
 
                 <div className="row">
@@ -53,3 +51,6 @@ export default class RegistrationPage extends Component {
         );
     }
 }
+
+RegistrationPage = auth(RegistrationPage, { login: false});
+export default RegistrationPage;

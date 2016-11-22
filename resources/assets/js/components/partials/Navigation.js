@@ -86,7 +86,7 @@ class Navigation extends Component {
 
 function mapStateToProps(state) {
     return {
-        isLoggedIn: state.auth.loggedIn,
+        isLoggedIn: state.auth.isLoggedIn,
         isAdmin: state.auth.user && state.auth.user.isAdmin,
         name: state.auth.user ? state.auth.user.name : null
     }

@@ -13,7 +13,7 @@ const LOCAL_STORAGE_JWT_KEY = 'api_jwt';
 
 export default function reducer(state = {
     token: null,
-    loggedIn: false,
+    isLoggedIn: false,
     loading: false,
     error: null,
     user: null,
@@ -44,13 +44,13 @@ export default function reducer(state = {
             }
             else if (action.payload.data === 0) {
                 return Object.assign(newState, {
-                    loggedIn: false,
+                    isLoggedIn: false,
                     error: WRONG_EMAIL_OR_PASSWORD
                 });
             }
             else {
                 return Object.assign(newState, {
-                    loggedIn: false,
+                    isLoggedIn: false,
                     error: UNKNOWN_ERROR
                 });
             }
@@ -85,7 +85,7 @@ export default function reducer(state = {
             if (token) {
                 return Object.assign({
                     token: token,
-                    loggedIn: !!user,
+                    isLoggedIn: !!user,
                     user
                 });
             }
@@ -96,7 +96,7 @@ export default function reducer(state = {
             
             return Object.assign({
                 token: null,
-                loggedIn: false
+                isLoggedIn: false
             });
         default:
             return state;
