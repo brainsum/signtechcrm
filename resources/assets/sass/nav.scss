@@ -1,6 +1,7 @@
 .nav {
     display: none;
     list-style: none;
+    margin-bottom: 0;
     padding-left: 0;
 
     @include media-breakpoint-up(md) {
@@ -9,6 +10,7 @@
 
     &__item {
         display: inline-block;
+        vertical-align: middle;
 
         &:not(:last-child) {
             margin-right: 1rem;
@@ -36,6 +38,17 @@
                 background: $brand-primary;
                 color: #fff;
             }
+        }
+    }
+
+    &__logout {
+        padding: 1rem;
+        background: $gray-lightest;
+        border-radius: $border-radius;
+        text-align: right;
+
+        &-link {
+            display: inline-block;
         }
     }
 }

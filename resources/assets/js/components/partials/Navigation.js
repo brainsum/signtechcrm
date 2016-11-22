@@ -6,11 +6,10 @@ class Navigation extends Component {
     render() {
         let items;
 
-        if (this.props.loggedIn) {
+        if (this.props.isLoggedIn) {
             items = [
                 { to: '/completed-forms', title: this.props.isAdmin ? 'Completed forms' : 'My completed forms' },
                 /*{ to: '/my-account', title: 'My account' },*/
-                { to: '/logout', title: 'Logout' }
             ];
 
             if (this.props.isAdmin) {
@@ -38,6 +37,7 @@ class Navigation extends Component {
                             </Link>
                         </li>
                     ))}
+                    {this.renderUser()}
                 </ul>
 
                 <div className="nav-mobile">
@@ -62,17 +62,33 @@ class Navigation extends Component {
                                 </Link>
                             </li>
                         ))}
+                        {this.renderUser()}
                     </ul>
                 </div>
             </div>
         );
     }
+
+    renderUser() {
+        if (this.props.isLoggedIn) {
+            return (
+                <li className="nav__item nav__logout">
+                    {this.props.name}
+                    <br />
+                    <Link className="nav__logout-link" to="/logout">Logout</Link>
+                </li>
+            );
+        }
+
+        return null;
+    }
 }
 
 function mapStateToProps(state) {
     return {
-        loggedIn: state.auth.loggedIn,
-        isAdmin: state.auth.user && state.auth.user.isAdmin
+        isLoggedIn: state.auth.loggedIn,
+        isAdmin: state.auth.user && state.auth.user.isAdmin,
+        name: state.auth.user ? state.auth.user.name : null
     }
 }
 

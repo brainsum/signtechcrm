@@ -64,29 +64,29 @@ export default function reducer(state = {
             });
         case AUTH_READ_API_JWT:
             token = localStorage.getItem(LOCAL_STORAGE_JWT_KEY);
-            let data = null;
+            let user = null;
 
             try {
-                // Get data from token
-                data = token.split('.')[1];
+                // Get user from token
+                user = token.split('.')[1];
                 // Base64 decode it
-                data = atob(data);
+                user = atob(user);
                 // Parse it as JSON
-                data = JSON.parse(data);
-                // Normalize data
-                data.companyId = parseInt(data.company);
-                delete data.company;
-                data.isAdmin = !!data.admin;
-                delete data.admin;
+                user = JSON.parse(user);
+                // Normalize user
+                user.companyId = parseInt(user.company);
+                delete user.company;
+                user.isAdmin = !!user.admin;
+                delete user.admin;
             } catch(ex) {
-                data = null;
+                user = null;
             }
 
             if (token) {
                 return Object.assign({
                     token: token,
-                    loggedIn: !!data,
-                    user: data
+                    loggedIn: !!user,
+                    user
                 });
             }
 
