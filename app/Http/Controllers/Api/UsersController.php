@@ -70,7 +70,55 @@ class UsersController extends Controller
         return $response;
     }
 
-    private function respondWithError() {
+    /**
+     * Toggle user is active status
+     */
+    public function toggleIsActive(Request $request) {
+        $jwt = $request->input('jwt');
+        $id = $request->input('id');
+        $isActive = $request->input('isActive');
 
+        $data = [
+            'form_params' => [
+                'function' => 'modify_user_by_admin',
+                'token' => $jwt,
+                'uid' => $id,
+                'status' => (int)$isActive,
+                'from_mail' => config('signtechapi.from_mail'),
+                'base_url' => config('signtechapi.base_url'),
+                'site_name' => config('signtechapi.site_name')
+            ]
+        ];
+
+        // @todo
+        $http_auth_credentials = config('signtechapi.http_auth_credentials');
+        if ($http_auth_credentials) {
+            $data['auth'] = explode(':', $http_auth_credentials);
+        }
+
+        $client = new Client;
+        $response = $client->post(config('signtechapi.url'), $data);
+        $response = json_decode($response->getBody(), true);
+
+        // -12 is SIGNTECH_API_1_1_USER_STATUS_UNMODIFIED, which is also good for us
+        if ($response === 1 || $response === -11) {
+            return ['success' => true];
+        }
+        else {
+            $messages = [
+                0 => 'Unexcepted error.',
+                -1 => 'Parameter failed.',
+                -3 => 'User doesn\'t exists.',
+                -7 => 'You are not authorized to do this operation.',
+                -12 => 'Failed to send e-mail to the user about the activation.'
+            ];
+
+            if (in_array($response, $messages)) {
+                return response(['error' => $messages[$response]], 400);
+            }
+            else {
+                return response(['error' => $messages[0]], 400);
+            }
+        }
     }
 }

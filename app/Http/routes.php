@@ -21,6 +21,7 @@ Route::group([
         Route::get('/completed-forms', 'CompletedFormsController@index');
         Route::post('/invite', 'InviteController@index');
         Route::get('/users', 'UsersController@index');
+        Route::put('/users/toggleIsActive', 'UsersController@toggleIsActive');
     });
 
     Route::post('/post', 'PostController@index');

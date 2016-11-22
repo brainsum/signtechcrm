@@ -69,22 +69,37 @@ class UsersPage extends Component {
                 </td>
                 <td>{user.phone}</td>
                 <td className="text-xs-center">
-                    <button
-                        className={`btn btn-${user.isActive ? 'success' : 'danger'}`}
-                        onClick={() => this.handleToggleActive(user.id)}
-                        type="button"
-                    >
-                        {user.isActive ? 'Deactivate' : 'Activate'}
-                    </button>
+                    {this.renderToggleButton(user)}
                 </td>
             </tr>
+        );
+    }
+
+    renderToggleButton(user) {
+        const { active } = this.props;
+        const isLoading = active[user.id] && active[user.id].isLoading;
+
+        return (
+            <button
+                className={`btn btn-${user.isActive ? 'success' : 'danger'}`}
+                onClick={() => this.handleToggleActive(user.id)}
+                type="button"
+                disabled={isLoading}
+            >
+                {`${user.isActive ? 'Dea': 'A'}ctiva${isLoading ? 'ting...' : 'te' }`}
+            </button>
         );
     }
 }
 
 function mapStateToProps(state) {
-    const { isLoading, users, error } = state.users;
-    return { isLoading, users, error };
+    const { isLoading, users, error } = state.users.list;
+    return {
+        isLoading,
+        users,
+        error,
+        active: state.users.active
+    };
 }
 
 UsersPage = connect(mapStateToProps, { fetch, toggleIsActive })(UsersPage);
