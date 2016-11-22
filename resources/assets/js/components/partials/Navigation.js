@@ -13,7 +13,10 @@ class Navigation extends Component {
             ];
 
             if (this.props.isAdmin) {
-                items.splice(1, 0, { to: '/invite', title: 'Invite' });
+                items.push(
+                    { to: '/users', 'title': 'Users' },
+                    { to: '/invite', title: 'Invite' }
+                );
             }
         }
         else {

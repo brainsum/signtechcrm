@@ -5,6 +5,7 @@ import forgotPassword from 'app/ducks/forgotPassword';
 import setNewPassword from 'app/ducks/setNewPassword';
 import invite from 'app/ducks/invite';
 import registration from 'app/ducks/registration';
+import users from 'app/ducks/users';
 
 export default combineReducers({
     auth,
@@ -12,5 +13,6 @@ export default combineReducers({
     forgotPassword,
     setNewPassword,
     invite,
-    registration
+    registration,
+    users
 });

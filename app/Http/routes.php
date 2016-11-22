@@ -20,6 +20,7 @@ Route::group([
     Route::group(['middleware' => 'validate-jwt'], function () {
         Route::get('/completed-forms', 'CompletedFormsController@index');
         Route::post('/invite', 'InviteController@index');
+        Route::get('/users', 'UsersController@index');
     });
 
     Route::post('/post', 'PostController@index');
