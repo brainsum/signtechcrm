@@ -26,7 +26,6 @@ Route::group([
     Route::any('/', 'ForwardController@index');
     Route::post('/post', 'PostController@index');
     Route::post('/forgot-password', 'ForgotPasswordController@index');
-    Route::get('/test', 'TestController@index');
 });
 
 // All other routes to the SPA, that will handle 404 too
