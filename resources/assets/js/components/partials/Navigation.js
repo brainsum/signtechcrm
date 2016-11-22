@@ -91,7 +91,7 @@ function mapStateToProps(state) {
     return {
         isLoggedIn: state.auth.isLoggedIn,
         isAdmin: state.auth.user && state.auth.user.isAdmin,
-        name: state.auth.user ? state.auth.user.name : null
+        name: state.auth.user ? `${state.auth.user.first_name} ${state.auth.user.last_name}` : null
     }
 }
 
