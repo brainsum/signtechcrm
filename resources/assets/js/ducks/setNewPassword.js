@@ -17,7 +17,7 @@ const errors = {
 
 export default function reducer(state = {
     isLoading: false,
-    success: true,
+    success: false,
     error: false
 }, action) {
     switch (action.type) {
