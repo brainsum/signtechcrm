@@ -68,7 +68,7 @@ class PostController extends Controller
             'id' => $formId
         ];
 
-        $response = json_decode($api->request($params), true);
+        $response = json_decode($api->request($params));
 
         return $response->form_title;
     }
