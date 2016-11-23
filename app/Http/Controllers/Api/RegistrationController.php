@@ -23,8 +23,10 @@ class RegistrationController extends Controller
             // The user's language is english by default
             'language' => 'en',
             // Company id from the environment variables
-            'company' => config('signtechapi.company_id')
-
+            'company' => config('signtechapi.company_id'),
+            'from_mail' => config('signtechapi.from_mail'),
+            'base_url' => config('signtechapi.base_url'),
+            'site_name' => config('signtechapi.site_name')
         ];
 
         // Rename fields
