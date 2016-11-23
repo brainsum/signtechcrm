@@ -145,6 +145,7 @@ class CompletedFormsPage extends Component {
                         <a
                             href={form.file}
                             className="btn btn-link"
+                            target="_blank"
                         >
                             Download PDF
                         </a>
