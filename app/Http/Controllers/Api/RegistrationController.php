@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-use GuzzleHttp\Client;
+use App\Helpers\Contracts\SignTechApiContract;
 
 class RegistrationController extends Controller
 {
@@ -15,17 +15,16 @@ class RegistrationController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index(Request $request, SignTechApiContract $api)
     {
-        $data = [
-            'form_params' => [
-                // Call the API's registration function
-                'function' => 'registration',
-                // The user's language is english by default
-                'language' => 'en',
-                // Company id from the environment variables
-                'company' => config('signtechapi.company_id')
-            ]
+        $params = [
+            // Call the API's registration function
+            'function' => 'registration',
+            // The user's language is english by default
+            'language' => 'en',
+            // Company id from the environment variables
+            'company' => config('signtechapi.company_id')
+
         ];
 
         // Rename fields
@@ -36,18 +35,10 @@ class RegistrationController extends Controller
             'lastName' => 'last_name'
         ];
         foreach($renameFields as $from => $to) {
-            $data['form_params'][$to] = $request->input($from);
+            $params[$to] = $request->input($from);
         }
 
-        $http_auth_credentials = config('signtechapi.http_auth_credentials');
-        if ($http_auth_credentials) {
-            $data['auth'] = explode(':', $http_auth_credentials);
-        }
-
-        $client = new Client;
-        $response = $client->post(config('signtechapi.url'), $data);
-
-        $response = json_decode($response->getBody(), true);
+        $response = json_decode($api->request($params), true);
 
         return $this->getResponse($response);
     }

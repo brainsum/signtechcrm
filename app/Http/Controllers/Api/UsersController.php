@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-use GuzzleHttp\Client;
+use App\Helpers\Contracts\SignTechApiContract;
 
 class UsersController extends Controller
 {
@@ -15,26 +15,16 @@ class UsersController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index(Request $request, SignTechApiContract $api)
     {
         $jwt = $request->input('jwt');
 
-        $data = [
-            'form_params' => [
-                'function' => 'user_list_by_company',
-                'token' => $jwt
-            ]
+        $params = [
+            'function' => 'user_list_by_company',
+            'token' => $jwt
         ];
 
-        // @todo
-        $http_auth_credentials = config('signtechapi.http_auth_credentials');
-        if ($http_auth_credentials) {
-            $data['auth'] = explode(':', $http_auth_credentials);
-        }
-
-        $client = new Client;
-        $response = $client->post(config('signtechapi.url'), $data);
-        $response = json_decode($response->getBody(), true);
+        $response = json_decode($api->request($params), true);
 
         if (is_array($response)) {
             return $this->transformResponse($response);
@@ -73,32 +63,22 @@ class UsersController extends Controller
     /**
      * Toggle user is active status
      */
-    public function toggleIsActive(Request $request) {
+    public function toggleIsActive(Request $request, SignTechApiContract $api) {
         $jwt = $request->input('jwt');
         $id = $request->input('id');
         $isActive = $request->input('isActive');
 
-        $data = [
-            'form_params' => [
-                'function' => 'modify_user_by_admin',
-                'token' => $jwt,
-                'uid' => $id,
-                'status' => (int)$isActive,
-                'from_mail' => config('signtechapi.from_mail'),
-                'base_url' => config('signtechapi.base_url'),
-                'site_name' => config('signtechapi.site_name')
-            ]
+        $params = [
+            'function' => 'modify_user_by_admin',
+            'token' => $jwt,
+            'uid' => $id,
+            'status' => (int)$isActive,
+            'from_mail' => config('signtechapi.from_mail'),
+            'base_url' => config('signtechapi.base_url'),
+            'site_name' => config('signtechapi.site_name')
         ];
 
-        // @todo
-        $http_auth_credentials = config('signtechapi.http_auth_credentials');
-        if ($http_auth_credentials) {
-            $data['auth'] = explode(':', $http_auth_credentials);
-        }
-
-        $client = new Client;
-        $response = $client->post(config('signtechapi.url'), $data);
-        $response = json_decode($response->getBody(), true);
+        $response = json_decode($api->request($params), true);
 
         // -12 is SIGNTECH_API_1_1_USER_STATUS_UNMODIFIED, which is also good for us
         if ($response === 1 || $response === -11) {

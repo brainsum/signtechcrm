@@ -7,7 +7,7 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Models\CompletedForm;
 use Carbon\Carbon;
-use GuzzleHttp\Client;
+use App\Helpers\Contracts\SignTechApiContract;
 use \Storage;
 use \Firebase\JWT\JWT;
 use Illuminate\Support\Facades\Log;
@@ -19,7 +19,7 @@ class PostController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index(Request $request, SignTechApiContract $api)
     {
         $json = json_decode($request->input('json'), true);
         $filePath = $request->input('file');
@@ -48,7 +48,7 @@ class PostController extends Controller
         $completedForm = new CompletedForm;
         $completedForm->user_id = $userId;
         $completedForm->form_id = $json['form_id'];
-        $completedForm->title = $this->getFormTitleByFormId($completedForm->form_id);
+        $completedForm->title = $this->getFormTitleByFormId($api, $completedForm->form_id);
         $completedForm->data = $this->getData($json);
         $completedForm->file = $fileName;
         $completedForm->save();
@@ -62,25 +62,15 @@ class PostController extends Controller
      * @param int $formId
      * @return string
      */
-    private function getFormTitleByFormId($formId) {
-        $client = new Client;
-
-        $data = [
-            'form_params' => [
-                'function' => 'form_by_id',
-                'id' => $formId
-            ]
+    private function getFormTitleByFormId($api, $formId) {
+        $params = [
+            'function' => 'form_by_id',
+            'id' => $formId
         ];
 
-        $http_auth_credentials = config('signtechapi.http_auth_credentials');
-        if ($http_auth_credentials) {
-            $data['auth'] = explode(':', $http_auth_credentials);
-        }
+        $response = json_decode($api->request($params), true);
 
-        $response = $client->post(config('signtechapi.url'), $data);
-        $data = json_decode($response->getBody());
-
-        return $data->form_title;
+        return $response->form_title;
     }
 
     /**
