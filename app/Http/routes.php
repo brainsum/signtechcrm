@@ -22,6 +22,8 @@ Route::group([
         Route::post('/invite', 'InviteController@index');
         Route::get('/users', 'UsersController@index');
         Route::put('/users/toggleIsActive', 'UsersController@toggleIsActive');
+        Route::get('/user', 'UserController@index');
+        Route::put('/user', 'UserController@save');
     });
 
     Route::post('/post', 'PostController@index');

@@ -78,6 +78,8 @@ class Navigation extends Component {
                 <li className="nav__item nav__logout">
                     {this.props.name}
                     <br />
+                    <Link to="/my-account">My account</Link>
+                    {' '}
                     <Link className="nav__logout-link" to="/logout">Logout</Link>
                 </li>
             );

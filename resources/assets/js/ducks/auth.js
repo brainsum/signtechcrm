@@ -8,6 +8,7 @@ export const AUTH_LOGOUT = 'AUTH_LOGOUT';
 
 const UNKNOWN_ERROR = 'Unknown error. Please try again.';
 const WRONG_EMAIL_OR_PASSWORD = 'Login failed, you typed in a wrong e-mail or password';
+const NOT_ACTIVATED_YET = 'Your user account has not been activated yet.';
 
 const LOCAL_STORAGE_JWT_KEY = 'api_jwt';
 
@@ -42,7 +43,13 @@ export default function reducer(state = {
                     error: null
                 });
             }
-            else if (action.payload.data === 0) {
+            else if (action.payload.data === -8) {
+                return Object.assign(newState, {
+                    isLoggedIn: false,
+                    error: NOT_ACTIVATED_YET
+                });
+            }
+            else if (action.payload.data === -9) {
                 return Object.assign(newState, {
                     isLoggedIn: false,
                     error: WRONG_EMAIL_OR_PASSWORD

@@ -72,6 +72,7 @@ html {
 body {
     position: relative;
     min-height: 100%;
+    overflow-y: scroll;
 
     @include media-breakpoint-up(md) {
     	padding-bottom: 7rem;
