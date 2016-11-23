@@ -16,17 +16,16 @@ class UsersPage extends Component {
 
     render() {
         return (
-            <div className="container">
+            <div className="container users">
                 <h1 className="page-title">Manage company users</h1>
 
-                <table className="table table-striped table-hover">
+                <table className="table table-striped table-hover table--responsive users__table">
                     <thead>
                         <tr>
-                            <th>First name</th>
-                            <th>Last name</th>
+                            <th>Name</th>
                             <th>E-mail</th>
                             <th>Phone</th>
-                            <th className="text-xs-center" width="1%">Activated</th>
+                            <th className="text-xs-center" width="15%">Activated</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -62,12 +61,11 @@ class UsersPage extends Component {
     renderRow(user) {
         return (
             <tr key={user.id}>
-                <td>{user.firstName}</td>
-                <td>{user.lastName}</td>
-                <td>
+                <td data-title="Name">{user.firstName} {user.lastName}</td>
+                <td data-title="E-mail">
                     <a href={`mailto:${user.email}`}>{user.email}</a>
                 </td>
-                <td>{user.phone}</td>
+                <td data-title="Phone">{user.phone}</td>
                 <td className="text-xs-center">
                     {this.renderToggleButton(user)}
                 </td>

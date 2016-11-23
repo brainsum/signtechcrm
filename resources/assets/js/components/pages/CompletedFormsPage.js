@@ -105,7 +105,7 @@ class CompletedFormsPage extends Component {
             <div className="container my-forms">
                 <h1 className="page-title">{this.props.isAdmin ? 'Completed forms' : 'My completed forms'}</h1>
 
-                <table className="table table-striped table-hover my-forms__table">
+                <table className="table table-striped table-hover table--responsive my-forms__table">
                     <thead>
                         <tr>
                             <th>
@@ -139,8 +139,8 @@ class CompletedFormsPage extends Component {
         if (this.props.items && this.props.items.data.length) {
             return this.props.items.data.map(form => (
                 <tr key={form.id}>
-                    <td>{form.title}</td>
-                    <td className="my-forms__date">{form.created_at}</td>
+                    <td data-title="Title">{form.title}</td>
+                    <td className="my-forms__date" data-title="Date of completion">{form.created_at}</td>
                     <td className="my-forms__download-pdf">
                         <a
                             href={form.file}

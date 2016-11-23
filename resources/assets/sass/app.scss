@@ -63,6 +63,7 @@
 @import 'nav';
 @import 'footer';
 @import 'my-forms';
+@import 'users';
 
 html {
     height: 100%;
@@ -87,4 +88,28 @@ body {
 
 .page-link {
     cursor: pointer;
+}
+
+.table--responsive {
+    @media (max-width: 560px) {
+        thead {
+            display: none;
+        }
+
+        tbody,
+        tfoot,
+        tr,
+        td,
+        th {
+            display: block;
+            width: 100%;
+        }
+
+        td[data-title] {
+            &::before {
+                content: attr(data-title) ": ";
+                font-weight: 700;
+            }
+        }
+    }
 }

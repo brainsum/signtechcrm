@@ -77,13 +77,13 @@ class InvitePage extends Component {
 
     renderTable() {
         return (
-            <table className="table">
+            <table className="table table--responsive">
                 <thead>
                     <tr>
                         <th width="1%">#</th>
                         <th>E-mail*</th>
-                        <th>Last name*</th>
                         <th>First name*</th>
+                        <th>Last name*</th>
                         <th>Phone</th>
                         <th width="1%"></th>
                     </tr>
@@ -127,7 +127,7 @@ class InvitePage extends Component {
             <tbody key={index}>
                 <tr className={className ? `bg-${className} text-white` : ''}>
                     <td>{index + 1}.</td>
-                    <td>
+                    <td data-title="E-mail">
                         <input
                             className="form-control"
                             type="email"
@@ -137,16 +137,7 @@ class InvitePage extends Component {
                         />
                         { message ? <div className={`mt-1`}><strong>{message}</strong></div> : null}
                     </td>
-                    <td>
-                        <input
-                            className="form-control"
-                            type="text"
-                            value={user.lastName}
-                            onChange={e => this.handleChange(e, index, 'lastName')}
-                            required
-                        />
-                    </td>
-                    <td>
+                    <td data-title="First name">
                         <input
                             className="form-control"
                             type="text"
@@ -155,7 +146,16 @@ class InvitePage extends Component {
                             required
                         />
                     </td>
-                    <td>
+                    <td data-title="Last name">
+                        <input
+                            className="form-control"
+                            type="text"
+                            value={user.lastName}
+                            onChange={e => this.handleChange(e, index, 'lastName')}
+                            required
+                        />
+                    </td>
+                    <td data-title="Phone">
                         <input
                             className="form-control"
                             type="phone"
