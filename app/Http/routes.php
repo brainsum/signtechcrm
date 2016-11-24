@@ -26,6 +26,7 @@ Route::group([
         Route::put('/user', 'UserController@save');
     });
 
+    Route::post('/login', 'LoginController@index');
     Route::post('/post', 'PostController@index');
     Route::post('/forgot-password', 'ForgotPasswordController@index');
     Route::post('/registration', 'RegistrationController@index');

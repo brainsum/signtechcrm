@@ -32,9 +32,11 @@ class ValidateJwt
             $jwt = $exploded[1];
             $userData = JWT::decode($jwt, config('signtechapi.jwt_secret'), ['HS256']);
         } catch(\Exception $exception) {
-            return Response::make([
-                'error' => 'Invalid token.'
-            ], 403);
+            return response(['error' => 'Invalid token.'], 403);
+        }
+
+        if ($userData->company != config('signtechapi.company_id')) {
+            return response(['error' => 'You are not part of the SQR company.'], 403);
         }
 
         $userData->isAdmin = !!$userData->admin;

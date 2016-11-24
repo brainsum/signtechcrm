@@ -1,14 +1,10 @@
 import qs from 'qs';
 
-export const AUTH_LOGIN_REQUEST = 'AUTH_LOGIN_REQUEST';
-export const AUTH_LOGIN_SUCCESS = 'AUTH_LOGIN_SUCCESS';
-export const AUTH_LOGIN_FAILURE = 'AUTH_LOGIN_FAILURE';
-export const AUTH_READ_API_JWT = 'AUTH_READ_API_JWT';
-export const AUTH_LOGOUT = 'AUTH_LOGOUT';
-
-const UNKNOWN_ERROR = 'Unknown error. Please try again.';
-const WRONG_EMAIL_OR_PASSWORD = 'Login failed, you typed in a wrong e-mail or password';
-const NOT_ACTIVATED_YET = 'Your user account has not been activated yet.';
+export const LOGIN = 'auth/login';
+export const LOGIN_SUCCESS = 'auth/loginSuccess';
+export const LOGIN_FAILURE = 'auth/loginFailure';
+export const READ_API_JWT = 'auth/readApiJwt';
+export const LOGOUT = 'auth/logout';
 
 const LOCAL_STORAGE_JWT_KEY = 'api_jwt';
 
@@ -23,53 +19,28 @@ export default function reducer(state = {
 
     switch (action.type) {
         // Login request started
-        case AUTH_LOGIN_REQUEST:
+        case LOGIN:
             return Object.assign({}, state, {
                 loading: true,
                 hasError: false
             });
-        // Login request finished successfully (not necessary a successful login)
-        case AUTH_LOGIN_SUCCESS:
-            let newState = Object.assign({}, state, {
-                loading: false
-            });
+        // Successful login
+        case LOGIN_SUCCESS:
             token = action.payload.data.token;
+            localStorage.setItem(LOCAL_STORAGE_JWT_KEY, token);
 
-            if (token) {
-                localStorage.setItem(LOCAL_STORAGE_JWT_KEY, token);
-
-                return Object.assign(newState, {
-                    token,
-                    error: null
-                });
-            }
-            else if (action.payload.data === -8) {
-                return Object.assign(newState, {
-                    isLoggedIn: false,
-                    error: NOT_ACTIVATED_YET
-                });
-            }
-            else if (action.payload.data === -9) {
-                return Object.assign(newState, {
-                    isLoggedIn: false,
-                    error: WRONG_EMAIL_OR_PASSWORD
-                });
-            }
-            else {
-                return Object.assign(newState, {
-                    isLoggedIn: false,
-                    error: UNKNOWN_ERROR
-                });
-            }
-
-            return newState;
-        // There was an error while trying to login
-        case AUTH_LOGIN_FAILURE:
             return Object.assign({}, state, {
                 loading: false,
-                error: UNKNOWN_ERROR
+                token,
+                error: null
             });
-        case AUTH_READ_API_JWT:
+        // There was an error while trying to login
+        case LOGIN_FAILURE:
+            return Object.assign({}, state, {
+                loading: false,
+                error: action.error.response.data.message || 'Unexcepted error.'
+            });
+        case READ_API_JWT:
             token = localStorage.getItem(LOCAL_STORAGE_JWT_KEY);
             let user = null;
 
@@ -98,7 +69,7 @@ export default function reducer(state = {
             }
 
             return state;
-        case AUTH_LOGOUT:
+        case LOGOUT:
             localStorage.removeItem(LOCAL_STORAGE_JWT_KEY);
             
             return Object.assign({
@@ -112,16 +83,15 @@ export default function reducer(state = {
 
 export function login(email, password) {
     return {
-        types: [AUTH_LOGIN_REQUEST, AUTH_LOGIN_SUCCESS, AUTH_LOGIN_FAILURE],
+        types: [LOGIN, LOGIN_SUCCESS, LOGIN_FAILURE],
         payload: {
             request: {
-                url: '/',
+                url: '/login',
                 method: 'post',
-                data: qs.stringify({
-                    'function': 'login',
+                data: {
                     name: email,
                     password
-                })
+                }
             }
         }
     }
@@ -129,12 +99,12 @@ export function login(email, password) {
 
 export function readApiJwt() {
     return {
-        type: AUTH_READ_API_JWT
+        type: READ_API_JWT
     }
 }
 
 export function logout() {
     return {
-        type: AUTH_LOGOUT
+        type: LOGOUT
     }
 }
