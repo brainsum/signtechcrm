@@ -41,7 +41,10 @@ class PostController extends Controller
         $userId = null;
         $token = $request->input('token');
         if ($token) {
-            $userData = JWT::decode($token['token'], config('signtechapi.jwt_secret'), ['HS256']);
+            if (is_array($token)) {
+                $token = $token['token'];
+            }
+            $userData = JWT::decode($token, config('signtechapi.jwt_secret'), ['HS256']);
             $userId = $userData->uid;
         }
 
