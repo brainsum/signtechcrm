@@ -22,17 +22,17 @@ class PostController extends Controller
     public function index(Request $request, SignTechApiContract $api)
     {
         $json = json_decode($request->input('json'), true);
-        $filePath = $request->input('file');
+        $file = $request->input('file');
 
         if (!$json) {
             return response(['error' => 'Missing or invalid json parameter'], 400);
         }
 
-        if (!$filePath) {
+        if (!$file) {
             return response(['error' => 'Missing file parameter'], 400);
         }
 
-        $fileName = $this->downloadFile($filePath);
+        $fileName = $this->saveFile($file);
 
         if (!$fileName) {
             return response(['error' => 'Couldn\'t find the file'], 400);
@@ -95,26 +95,36 @@ class PostController extends Controller
      * @param string $file
      * @return string|boolean false on error
      */
-    private function downloadFile($path) {
-        $path = base64_decode($path);
-        $filename = basename($path);
+    private function saveFile($file) {
+        $file = base64_decode($file);
 
-        // HTTP auth if needed
-        $options = [];
-        $http_auth_credentials = config('signtechapi.http_auth_credentials');
-        if ($http_auth_credentials) {
-            $options['http'] = [
-                'header' => 'Authorization: Basic ' . base64_encode($http_auth_credentials)
-            ];
+        // From signtechforms.com web sign we receive an URL
+        if (filter_var($file, FILTER_VALIDATE_URL)) { 
+            $filename = basename($file);
+
+            // HTTP auth if needed
+            $options = [];
+            $http_auth_credentials = config('signtechapi.http_auth_credentials');
+            if ($http_auth_credentials) {
+                $options['http'] = [
+                    'header' => 'Authorization: Basic ' . base64_encode($http_auth_credentials)
+                ];
+            }
+
+            try {
+                $content = file_get_contents($file, null, stream_context_create($options));
+            } catch(\Exception $err) {
+                return false;
+            }
         }
-
-        try {
-            $content = file_get_contents($path, null, stream_context_create($options));
-        } catch(\Exception $err) {
-            return false;
+        // From the apps it's a PDF base64 encoded
+        else {
+            $content = $file;
+            // Generate a random filename
+            $filename =  md5(uniqid() . md5($content)) . '.pdf';
         }
 
         Storage::disk('pdfs')->put($filename, $content);
-        return $filename;
+        return $filename;        
     }
 }
