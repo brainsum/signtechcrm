@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\CompletedForm;
+use Carbon\Carbon;
 
 class CompletedFormsController extends Controller
 {
@@ -30,11 +31,22 @@ class CompletedFormsController extends Controller
         if ($filters) {
             $filters = json_decode($filters, TRUE);
 
+
             foreach ($filters as $key => $value) {
-                switch ($key) {
-                    case 'title':
-                        $completedForms = $completedForms->where('title', 'like', sprintf('%%%s%%', $value));
-                        break;
+                if ($value) {
+                    switch ($key) {
+                        case 'title':
+                            $completedForms = $completedForms->where('title', 'like', sprintf('%%%s%%', $value));
+                            break;
+                        case 'from':
+                            $from = Carbon::parse($value);
+                            $completedForms = $completedForms->where('created_at', '>=', $from->toDateString() . '00:00:00');
+                            break;
+                        case 'to':
+                            $to = Carbon::parse($value);
+                            $completedForms = $completedForms->where('created_at', '<=', $to->toDateString() . ' 25:59:59');
+                            break;
+                    }
                 }
             }
         }

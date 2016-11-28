@@ -5,6 +5,9 @@ import { fetch } from 'app/ducks/completedForms';
 import { connect } from 'react-redux';
 import { propTypes } from 'react-router';
 import isEqual from 'lodash/isEqual';
+import clone from 'lodash/clone';
+import DatePicker from 'react-datepicker';
+import moment from 'moment';
 
 class CompletedFormsPage extends Component {
     constructor(props, context) {
@@ -20,11 +23,18 @@ class CompletedFormsPage extends Component {
      * Get state from router props
      */
     getStateFromsProps(props) {
+        const filters = Object.assign({
+            title: '',
+            from: null,
+            to: null
+        }, props.location.query);
+
+        if (filters.from) filters.from = moment(filters.from);
+        if (filters.to) filters.to = moment(filters.to);
+
         return {
             page: parseInt(props.params.page) || 0,
-            filters: Object.assign({
-                title: ''
-            }, props.location.query)
+            filters
         }
     }
 
@@ -32,9 +42,14 @@ class CompletedFormsPage extends Component {
      * Redirect after page or filters change
      */
     transitionTo() {
+        const filters = clone(this.state.filters || {});
+
+        if (filters.from) filters.from = filters.from.format('YYYY-MM-DD');
+        if (filters.to) filters.to = filters.to.format('YYYY-MM-DD');
+
         this.context.router.transitionTo({
             pathname: `/completed-forms/${this.state.page || ''}`,
-            query: this.state.filters || {}
+            query: filters
         });
     }
 
@@ -90,6 +105,19 @@ class CompletedFormsPage extends Component {
         }, () => this.fetch(true, 150));
     }
 
+    handleChangeDate(type, date) {
+        if (!date.isValid()) {
+            date = null;
+        }
+
+        const filters = Object.assign({}, this.state.filters, { [type]: date });
+
+        this.setState({
+            page: 0,
+            filters
+        }, () => this.fetch(true));
+    }
+
     /**
      * Handle click callback for paginate
      *
@@ -101,6 +129,7 @@ class CompletedFormsPage extends Component {
     }
 
     render() {
+        console.log(this.state.filters.from);
         return (
             <div className="container my-forms">
                 <h1 className="page-title">{this.props.isAdmin ? 'Completed forms' : 'My completed forms'}</h1>
@@ -122,7 +151,24 @@ class CompletedFormsPage extends Component {
                                     />
                                 </div>
                             </th>
-                            <th className="my-forms__date" colSpan="2">Date of completion</th>
+                            <th className="my-forms__date" colSpan="2">
+                                Date of completion
+
+                                <DatePicker
+                                    className="form-control"
+                                    dateFormat="YYYY-MM-DD"
+                                    selected={this.state.filters.from}
+                                    onChange={date => this.handleChangeDate('from', date)}
+                                    placeholderText="From"
+                                />
+                                <DatePicker
+                                    className="form-control"
+                                     dateFormat="YYYY-MM-DD"
+                                    selected={this.state.filters.to}
+                                    onChange={date => this.handleChangeDate('to', date)}
+                                    placeholderText="To"
+                                />
+                            </th>
                         </tr>
                     </thead>
                     <tbody>

@@ -1,0 +1,8 @@
+@import 'react-datepicker/dist/react-datepicker';
+
+.react-datepicker {
+    &__input-container {
+        display: block;
+        margin-top: .5rem;
+    }
+}

@@ -19,7 +19,8 @@ elixir(function(mix) {
         .sass('app.scss', null, null, {
             includePaths: [
                 './node_modules/normalize.css',
-                './node_modules/bootstrap/scss'
+                './node_modules/bootstrap/scss',
+                './node_modules'
             ]
         })
         .webpack('app.js')
