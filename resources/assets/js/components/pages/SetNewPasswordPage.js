@@ -62,7 +62,6 @@ class SetNewPasswordPage extends Component {
         }
         else if (this.props.error) {
             return <div className="alert alert-danger">
-                <strong>Error</strong>
                 {this.props.error}
             </div>
         }

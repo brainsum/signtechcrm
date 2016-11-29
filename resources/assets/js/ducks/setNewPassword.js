@@ -1,5 +1,3 @@
-import qs from 'qs';
-
 export const SETNEWPASSWORD_REQUEST = 'SETNEWPASSWORD_REQUEST';
 export const SETNEWPASSWORD_SUCCESS = 'SETNEWPASSWORD_SUCCESS';
 export const SETNEWPASSWORD_FAILURE = 'SETNEWPASSWORD_FAILURE';
@@ -65,15 +63,14 @@ export function set({
         types: [SETNEWPASSWORD_REQUEST, SETNEWPASSWORD_SUCCESS, SETNEWPASSWORD_FAILURE],
         payload: {
             request: {
-                url: '/',
+                url: '/set-new-password',
                 method: 'post',
-                data: qs.stringify({
-                    'function': 'modify_password',
-                    uid: userId,
+                data: {
+                    userId,
                     timestamp,
-                    hashed_pass: hashedPassword,
+                    hashedPassword,
                     password
-                })
+                }
             }
         }
     }

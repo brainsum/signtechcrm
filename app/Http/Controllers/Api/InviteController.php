@@ -54,6 +54,7 @@ class InviteController extends Controller
                 'baseUrl' => config('signtechapi.base_url'),
                 'password' => $password
             ], function($message)  use($name, $user) {
+                $message->subject('Invitation');
                 $message->to($user['email'], $name);
             });
         }
