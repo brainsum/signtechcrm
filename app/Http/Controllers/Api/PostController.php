@@ -41,8 +41,6 @@ class PostController extends Controller
 
         $fileName = $this->saveFile($file);
 
-        die($fileName);
-
         if (!$fileName) {
             return response(['error' => 'Couldn\'t find the file'], 400);
         }
