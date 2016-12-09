@@ -31,8 +31,8 @@ class PostController extends Controller
         $file = $request->input('file');
 
         if (!$file) {
-            if ($request->hasFile('pdf')) {
-                $file = $request->file('pdf');
+            if ($request->hasFile('file')) {
+                $file = $request->file('file');
             }
             else {
                 return response(['error' => 'Missing file parameter'], 400);
