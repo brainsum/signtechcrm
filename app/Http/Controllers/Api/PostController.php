@@ -10,6 +10,7 @@ use Carbon\Carbon;
 use App\Helpers\Contracts\SignTechApiContract;
 use \Storage;
 use \Firebase\JWT\JWT;
+use \Symfony\Component\HttpFoundation\File\UploadedFile;
 use Illuminate\Support\Facades\Log;
 
 class PostController extends Controller
@@ -22,17 +23,25 @@ class PostController extends Controller
     public function index(Request $request, SignTechApiContract $api)
     {
         $json = json_decode($request->input('json'), true);
-        $file = $request->input('file');
 
         if (!$json) {
             return response(['error' => 'Missing or invalid json parameter'], 400);
         }
 
+        $file = $request->input('file');
+
         if (!$file) {
-            return response(['error' => 'Missing file parameter'], 400);
+            if ($request->hasFile('pdf')) {
+                $file = $request->file('pdf');
+            }
+            else {
+                return response(['error' => 'Missing file parameter'], 400);
+            }
         }
 
         $fileName = $this->saveFile($file);
+
+        die($fileName);
 
         if (!$fileName) {
             return response(['error' => 'Couldn\'t find the file'], 400);
@@ -93,38 +102,45 @@ class PostController extends Controller
      * Download and store file locally
      *
      * @param string $file
-     * @return string|boolean false on error
+     * @return string|boolean false on error otherwise name of the stored file
      */
     private function saveFile($file) {
-        $file = base64_decode($file);
+        // Generate a random filename
+        $fileName = md5(uniqid() . md5($file)) . '.pdf';
 
-        // From signtechforms.com web sign we receive an URL
-        if (filter_var($file, FILTER_VALIDATE_URL)) { 
-            $filename = basename($file);
-
-            // HTTP auth if needed
-            $options = [];
-            $http_auth_credentials = config('signtechapi.http_auth_credentials');
-            if ($http_auth_credentials) {
-                $options['http'] = [
-                    'header' => 'Authorization: Basic ' . base64_encode($http_auth_credentials)
-                ];
-            }
-
-            try {
-                $content = file_get_contents($file, null, stream_context_create($options));
-            } catch(\Exception $err) {
-                return false;
-            }
+        if ($file instanceof UploadedFile) {
+            $content = file_get_contents($file->getRealPath());
         }
-        // From the apps it's a PDF base64 encoded
         else {
-            $content = $file;
-            // Generate a random filename
-            $filename =  md5(uniqid() . md5($content)) . '.pdf';
+            $file = base64_decode($file);
+
+            // From signtechforms.com web sign we receive an URL
+            if (filter_var($file, FILTER_VALIDATE_URL)) { 
+                $fileName = basename($file);
+
+                // HTTP auth if needed
+                $options = [];
+                $http_auth_credentials = config('signtechapi.http_auth_credentials');
+                if ($http_auth_credentials) {
+                    $options['http'] = [
+                        'header' => 'Authorization: Basic ' . base64_encode($http_auth_credentials)
+                    ];
+                }
+
+                try {
+                    $content = file_get_contents($file, null, stream_context_create($options));
+                } catch(\Exception $err) {
+                    return false;
+                }
+            }
+            // From the apps it's a PDF base64 encoded
+            else {
+                $content = $file;
+            }
         }
 
-        Storage::disk('pdfs')->put($filename, $content);
-        return $filename;        
+        Storage::disk('pdfs')->put($fileName, $content);
+
+        return $fileName;        
     }
 }
