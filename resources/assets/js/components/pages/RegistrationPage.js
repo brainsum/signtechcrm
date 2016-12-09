@@ -57,7 +57,7 @@ class RegistrationPage extends UserDetailsPage {
                         {this.renderInputs()}
 
                         <button className="btn btn-primary btn-block">
-                            {this.props.isLoading ? 'Loading...' : 'Registrate'}
+                            {this.props.isLoading ? 'Loading...' : 'Confirm'}
                         </button>
 
                         {this.renderResult()}
