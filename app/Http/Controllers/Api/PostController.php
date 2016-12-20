@@ -10,7 +10,6 @@ use App\Helpers\Contracts\SignTechApiContract;
 use \Storage;
 use \Firebase\JWT\JWT;
 use \Symfony\Component\HttpFoundation\File\UploadedFile;
-use Illuminate\Support\Facades\Log;
 use App\Models\User;
 
 class PostController extends Controller
@@ -42,7 +41,7 @@ class PostController extends Controller
         $fileName = $this->saveFile($file);
 
         if (!$fileName) {
-            return response(['error' => 'Couldn\'t find the file'], 400);
+            return response(['error' => 'Couldn\'t find the file or it\'s not valid'], 400);
         }
 
         $userId = null;
@@ -132,6 +131,9 @@ class PostController extends Controller
                 } catch(\Exception $err) {
                     return false;
                 }
+            }
+            else if (!$file) {
+                return false;
             }
             // From the apps it's a PDF base64 encoded
             else {
