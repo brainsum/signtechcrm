@@ -23,8 +23,14 @@ class CompletedFormsController extends Controller
         $completedForms = CompletedForm
             ::orderBy('id', 'desc');
 
-        // Not admin users can see only their own forms
-        if (!$userData->isAdmin) {
+        // Admin users can see every submission by any user. Also the name of the users created them.
+        if ($userData->isAdmin) {
+            $completedForms = $completedForms->with(['user' => function($q) {
+                $q->select('id', 'first_name', 'last_name');
+            }]);
+        }
+        // Regular users only their own.
+        else {
             $completedForms = $completedForms->where('user_id', '=', $userData->uid);
         }
 
@@ -51,13 +57,30 @@ class CompletedFormsController extends Controller
             }
         }
 
-        $fields = ['id', 'title', 'created_at', 'file'];
         $result = $completedForms
-            ->paginate(15, $fields, 'page', $request->input('page') + 1)
+            ->paginate(15, NULL, 'page', $request->input('page') + 1)
             ->toArray();
+
+        // Fields to send to client
+        $fields = ['id', 'title', 'created_at', 'file'];
+        if ($userData->isAdmin) {
+            $fields = array_merge($fields, ['first_name', 'last_name']);
+        }
 
         foreach ($result['data'] as &$item) {
             $item['file'] = asset('pdfs/' . $item['file']);
+
+            if ($userData->isAdmin) {
+                $item['first_name'] = $item['user']['first_name'];
+                $item['last_name'] = $item['user']['last_name'];
+            }
+
+            // Remove not neccessary fields
+            foreach ($item as $key => $value) {
+                if (!in_array($key, $fields)) {
+                    unset($item[$key]);
+                }
+            }
         }
 
         return $result;

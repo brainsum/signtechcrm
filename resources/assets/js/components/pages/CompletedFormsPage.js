@@ -185,7 +185,10 @@ class CompletedFormsPage extends Component {
         if (this.props.items && this.props.items.data.length) {
             return this.props.items.data.map(form => (
                 <tr key={form.id}>
-                    <td data-title="Title">{form.title}</td>
+                    <td data-title="Title">
+                        {form.title}
+                        {this.props.isAdmin ? this.renderName(form) : null}
+                    </td>
                     <td className="my-forms__date" data-title="Date of completion">{form.created_at}</td>
                     <td className="my-forms__download-pdf">
                         <a
@@ -218,6 +221,18 @@ class CompletedFormsPage extends Component {
                 </tr>
             );
         }
+    }
+
+    renderName(form) {
+        if (form.first_name || form.last_name) {
+            return (
+                <div>
+                    <i><strong>Completed by:</strong> {form.first_name} {form.last_name}</i>
+                </div>
+            );
+        }
+
+        return null;
     }
 
     renderPaginate() {

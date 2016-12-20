@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Helpers\Contracts\SignTechApiContract;
+use App\Models\User;
 
 class UsersController extends Controller
 {
@@ -41,14 +42,23 @@ class UsersController extends Controller
     }
 
     /**
-     * Transform response received from SignTech API. Only the neccesary fields goes to our clients
+     * Transform response received from SignTech API. Only the neccesary fields goes to our clients.
+     * Also updates our users cache.
      */
     private function transformResponse($users) {
         $response = [];
 
         foreach($users as $user) {
+            $id = (int)$user['uid'];
+
+            // Update user cache
+            User::updateOrCreate($id, [
+                'first_name' => $user['first_name'],
+                'last_name' => $user['last_name']
+            ]);
+
             $response[] = [
-                'id' => (int)$user['uid'],
+                'id' => $id,
                 'firstName' => $user['first_name'],
                 'lastName' => $user['last_name'],
                 'email' => $user['mail'],

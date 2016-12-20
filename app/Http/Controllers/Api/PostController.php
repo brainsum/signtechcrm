@@ -12,6 +12,7 @@ use \Storage;
 use \Firebase\JWT\JWT;
 use \Symfony\Component\HttpFoundation\File\UploadedFile;
 use Illuminate\Support\Facades\Log;
+use App\Models\User;
 
 class PostController extends Controller
 {
@@ -53,6 +54,8 @@ class PostController extends Controller
             }
             $userData = JWT::decode($token, config('signtechapi.jwt_secret'), ['HS256']);
             $userId = $userData->uid;
+
+            $this->updateUserCache($api, $token);
         }
 
         $completedForm = new CompletedForm;
@@ -140,5 +143,29 @@ class PostController extends Controller
         Storage::disk('pdfs')->put($fileName, $content);
 
         return $fileName;        
+    }
+
+    /**
+     * Get's user data from Signtech API and updates local cache
+     *
+     * @param SignTechApiContract $api
+     * @param int $token JWT token
+     */
+    private function updateUserCache(SignTechApiContract $api, $token) {
+        $params = [
+            'function' => 'user_details',
+            'token' => $token
+        ];
+
+        $response = json_decode($api->request($params), true);
+
+        if (is_array($response) && !empty($response['uid'])) {
+            $userId = (int)$response['uid'];
+
+            User::updateOrCreate($userId, [
+                'first_name' => $response['first_name'],
+                'last_name' => $response['last_name']
+            ]);
+        }
     }
 }
