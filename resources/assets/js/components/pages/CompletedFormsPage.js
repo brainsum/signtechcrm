@@ -129,7 +129,6 @@ class CompletedFormsPage extends Component {
     }
 
     render() {
-        console.log(this.state.filters.from);
         return (
             <div className="container my-forms">
                 <h1 className="page-title">{this.props.isAdmin ? 'Completed forms' : 'My completed forms'}</h1>

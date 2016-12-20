@@ -70,10 +70,15 @@ class CompletedFormsController extends Controller
         foreach ($result['data'] as &$item) {
             $item['file'] = asset('pdfs/' . $item['file']);
 
+            // Add the name of the user who completed the form
             if ($userData->isAdmin) {
                 $item['first_name'] = $item['user']['first_name'];
                 $item['last_name'] = $item['user']['last_name'];
             }
+
+            // Format date
+            $date = Carbon::parse($item['created_at']);
+            $item['created_at'] = $date->formatLocalized('%d %B %Y');
 
             // Remove not neccessary fields
             foreach ($item as $key => $value) {
