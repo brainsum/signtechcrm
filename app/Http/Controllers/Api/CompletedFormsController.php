@@ -78,7 +78,7 @@ class CompletedFormsController extends Controller
 
             // Format date
             $date = Carbon::parse($item['created_at']);
-            $item['created_at'] = $date->formatLocalized('%d %B %Y');
+            $item['created_at'] = $date->formatLocalized('%d %B %Y, %H:%M');
 
             // Remove not neccessary fields
             foreach ($item as $key => $value) {
